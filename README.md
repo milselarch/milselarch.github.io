@@ -35,16 +35,16 @@ Yes, you can fork this repo. Please give me proper credit by linking back to [br
 
 ## 🛠 Installation & Set Up
 
-1. Install the Gatsby CLI
-
-   ```sh
-   npm install -g gatsby-cli
-   ```
-
-2. Install and use the correct version of Node using [NVM](https://github.com/nvm-sh/nvm)
+1. Install and use the correct version of Node using [NVM](https://github.com/nvm-sh/nvm)
 
    ```sh
    nvm install
+   ```
+
+2. Install the Gatsby CLI and yarn
+
+   ```sh
+   npm install -g gatsby-cli yarn
    ```
 
 3. Install dependencies
