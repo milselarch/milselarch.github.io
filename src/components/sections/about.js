@@ -21,7 +21,7 @@ const StyledAboutSection = styled.section`
 const StyledText = styled.div`
   ul.skills-list {
     display: grid;
-    grid-template-columns: repeat(2, minmax(140px, 200px));
+    grid-template-columns: repeat(4, minmax(140px, 400px));
     grid-gap: 0 10px;
     padding: 0;
     margin: 20px 0 0 0;
@@ -125,7 +125,48 @@ const About = () => {
     sr.reveal(revealContainer.current, srConfig());
   }, []);
 
-  const skills = ['JavaScript (ES6+)', 'TypeScript', 'React', 'Eleventy', 'Node.js', 'WordPress'];
+  /*
+  const recentSkills = [
+    'Golang', 'PostgreSQL', 'Docker',
+    'TypeScript', 'tailwind-css', 'React',
+  ];
+  */
+
+  const skills = [
+    'Python',
+    'Golang',
+    'Rust',
+    'C',
+    'C++',
+    'C#',
+    'Java',
+    'JavaScript',
+    'TypeScript',
+    'PHP',
+    'Django',
+    'Flask',
+    'FastAPI',
+    'React',
+    'VueJS',
+    'jQuery',
+    'MySQL',
+    'PostgreSQL',
+    'MariaDB',
+    'Redis',
+    'Docker',
+    'Linux administration',
+    'AWS',
+    'GCP',
+    'PyTorch',
+    'TensorFlow',
+    'Keras',
+    'Playwright',
+    'Selenium',
+    'tailwind-css',
+    'SCSS',
+    'HTML',
+    'CSS',
+  ];
 
   return (
     <StyledAboutSection id="about" ref={revealContainer}>

@@ -2,7 +2,7 @@
   "name": "v4",
   "description": "Personal Website V4",
   "version": "1.0.0",
-  "author": "Brittany Chiang <brittany.chiang@gmail.com>",
+  "author": "Charles Lim <milselarch@protonmail.com>",
   "repository": {
     "type": "git",
     "url": "https://github.com/bchiang7/v4"
@@ -16,7 +16,7 @@
     "build": "gatsby build",
     "develop": "gatsby develop",
     "format": "prettier --write \"**/*.{js,jsx,json,md}\"",
-    "start": "npm run develop",
+    "start": "npm run develop -- -p 6006",
     "serve": "gatsby serve",
     "clean": "gatsby clean",
     "prepare": "husky install",
