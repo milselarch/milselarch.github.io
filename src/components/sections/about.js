@@ -154,7 +154,7 @@ const About = () => {
     'MariaDB',
     'Redis',
     'Docker',
-    'Linux administration',
+    'Linux',
     'AWS',
     'GCP',
     'PyTorch',
@@ -202,7 +202,7 @@ const About = () => {
               &amp; React.
             </p>
 
-            <p>Here are a few technologies I’ve been working with recently:</p>
+            <p>Technologies I've worked with include: </p>
           </div>
 
           <ul className="skills-list">

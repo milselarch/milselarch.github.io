@@ -85,3 +85,17 @@ Yes, you can fork this repo. Please give me proper credit by linking back to [br
 | Lightest Slate | ![#ccd6f6](https://via.placeholder.com/10/ccd6f6?text=+) `#ccd6f6` |
 | White          | ![#e6f1ff](https://via.placeholder.com/10/e6f1ff?text=+) `#e6f1ff` |
 | Green          | ![#64ffda](https://via.placeholder.com/10/64ffda?text=+) `#64ffda` |
+
+## Todo list
+
+- Change the color scheme
+- Change the intro content
+- Change about me content
+- add and draw fancy parallax wallpaper on the intro
+- change out profile info
+- change out job description content
+- change out featured projects content
+- Change other projects content
+- build and deploy website
+- change codebase to use TypeScript instead of JavaScript
+- [x] Remove twitter and other unnecessary social media references
