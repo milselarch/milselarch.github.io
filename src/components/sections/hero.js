@@ -65,11 +65,11 @@ const Hero = () => {
   const four = (
     <>
       <p>
-        I’m a software engineer with broad experience across frontend, backend, and everything in
+        I’m a full-stack developer with broad experience across frontend, backend, and everything in
         between. From crafting dynamic user interfaces to building scalable APIs and managing
         dockerized deployments, I enjoy tackling challenges at every layer of the stack to create
-        impactful digital solutions. Currently, I’m focused on efficient visitor management systems
-        at{' '}
+        impactful digital solutions. Currently, I’m focused on making streamlined visitor management
+        systems at{' '}
         <a href="https://www.concordesecurity.com/" target="_blank" rel="noreferrer">
           Concorde Security
         </a>

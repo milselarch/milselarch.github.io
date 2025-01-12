@@ -89,8 +89,9 @@ Yes, you can fork this repo. Please give me proper credit by linking back to [br
 ## Todo list
 
 - Change the color scheme
-- Change the intro content
-- Change about me content
+- Change logo to my own
+- Remove / change splash screen
+- Re-appropriate and re-add projects archive page
 - add and draw fancy parallax wallpaper on the intro
 - change out profile info
 - change out job description content
@@ -98,4 +99,7 @@ Yes, you can fork this repo. Please give me proper credit by linking back to [br
 - Change other projects content
 - build and deploy website
 - change codebase to use TypeScript instead of JavaScript
+
+- [x] Change the intro content
+- [x] Change about me content
 - [x] Remove twitter and other unnecessary social media references
