@@ -3,6 +3,8 @@ date: '3'
 title: 'Slimedown Shooter'
 cover: './slimedown.png'
 github: 'https://github.com/milselarch/slimedown-shooter'
+ios: ''
+android: ''
 external: ''
 tech:
   - Unity
