@@ -1,12 +1,16 @@
 ---
-date: '2016-12-21'
-title: 'Software Engineer Co-op'
-company: 'Starry'
-location: 'Boston, MA'
-range: 'July - December 2016'
-url: 'https://starry.com/'
+date: '2017-09-08'
+title: 'Full-stack Developer Intern'
+company: 'Inginim'
+location: 'Singapore, Singapore'
+range: 'September - October 2017'
+url: '#'
 ---
 
-- Engineered and improved major features of Starry's customer-facing Android web app using ES6, Handlebars, Backbone, Marionette, and CSS
-- Proposed and implemented scalable solutions to issues identified with cloud services and applications responsible for communicating with the Starry Station internet router
-- Collaborated with designers and other developers to ensure thoughtful and consistent user experiences across Starry’s iOS and Android mobile apps
+- Developed an in-browser B2B helpdesk chatbot that matches user questions
+  to answers previously provided by help desk workers to reduce tech support
+  manpower needs using the RASA-NLU natural language processing library,
+  and a MySQL, Flask, and jQuery web stack.
+- Performed automated website UI testing for GhostInspector for client projects.
+- Forwarded questions that the chatbot could not resolve on its own to the
+  company’s in-house ticket management system via their REST API.
