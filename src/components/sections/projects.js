@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useStaticQuery, graphql } from 'gatsby';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import styled from 'styled-components';
@@ -190,8 +190,8 @@ const Projects = () => {
     }
   `);
 
-  const showMore = false;
-  // const [showMore, setShowMore] = useState(false);
+  // const showMore = false;
+  const [showMore, setShowMore] = useState(false);
   const revealTitle = useRef(null);
   const revealArchiveLink = useRef(null);
   const revealProjects = useRef([]);
@@ -305,9 +305,9 @@ const Projects = () => {
         )}
       </ul>
 
-      {/*<button className="more-button" onClick={() => setShowMore(!showMore)}>
+      <button className="more-button" onClick={() => setShowMore(!showMore)}>
         Show {showMore ? 'Less' : 'More'}
-      </button>*/}
+      </button>
     </StyledProjectsSection>
   );
 };

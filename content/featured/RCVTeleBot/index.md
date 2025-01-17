@@ -17,5 +17,5 @@ A bot that allows users to create and vote for
 [ranked choice]("https://www.youtube.com/watch?v=7P6aYbUo19U") polls on Telegram.
 The bot was created using the [python-telegram-bot](https://github.com/python-telegram-bot/python-telegram-bot)
 library on the backend, and uses the [peewee](https://github.com/coleifer/peewee)
-SQL ORM for data management. There is also an created using React + TypeScript
-that allows for users to vote for polls directly from a webapp within Telegram.
+SQL ORM for data management. There is also an integrated webapp created using
+React + TypeScript that also allows users to vote directly from within Telegram.
