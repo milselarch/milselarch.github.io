@@ -5,7 +5,7 @@ module.exports = {
     title: 'Charles Lim',
     description:
       'Charles Lim is a software engineer with broad experience in ' +
-      'backend, frontend and everything in between.',
+      'backend, frontend, devops, and machine learning.',
     siteUrl: 'https://brittanychiang.com', // No trailing slash allowed!
     image: '/og.png', // Path to your image you placed in the 'static' folder
   },
