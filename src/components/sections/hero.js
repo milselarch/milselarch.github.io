@@ -65,8 +65,8 @@ const Hero = () => {
   const four = (
     <>
       <p>
-        I’m a full-stack developer with broad experience across frontend, backend, and everything in
-        between. From crafting dynamic user interfaces to building scalable APIs and managing
+        I’m a full-stack developer with experience in backend, frontend, devops, and machine
+        learning. From crafting dynamic user interfaces to building scalable APIs and managing
         dockerized deployments, I enjoy tackling challenges at every layer of the stack to create
         impactful digital solutions. Currently, I’m focused on making streamlined visitor management
         systems at{' '}
