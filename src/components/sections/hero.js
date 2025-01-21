@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
-import styled from 'styled-components';
+// import styled from 'styled-components';
 import { navDelay, loaderDelay } from '@utils';
 import { usePrefersReducedMotion } from '@hooks';
+import * as heroStyles from './hero.scss';
 
+/*
 const StyledHeroSection = styled.section`
   ${({ theme }) => theme.mixins.flexCenter};
   flex-direction: column;
@@ -45,6 +47,7 @@ const StyledHeroSection = styled.section`
     margin-top: 50px;
   }
 `;
+*/
 
 const Hero = () => {
   const [isMounted, setIsMounted] = useState(false);
@@ -92,7 +95,7 @@ const Hero = () => {
   const items = [one, two, three, four];
 
   return (
-    <StyledHeroSection>
+    <div className={`hero ${heroStyles.hero}`}>
       {prefersReducedMotion ? (
         <>
           {items.map((item, i) => (
@@ -109,7 +112,7 @@ const Hero = () => {
             ))}
         </TransitionGroup>
       )}
-    </StyledHeroSection>
+    </div>
   );
 };
 
