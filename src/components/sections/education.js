@@ -17,7 +17,7 @@ const StyledProjectsSection = styled.section`
   }
 
   .archive-link {
-    font-family: var(--font-mono), sans-serif;
+    font-family: var(--font-mono);
     font-size: var(--fz-sm);
     &:after {
       bottom: 0.1em;
@@ -154,7 +154,7 @@ const StyledProject = styled.li`
     list-style: none;
 
     li {
-      font-family: var(--font-mono);
+      font-family: var(--font-mono), sans-serif;
       font-size: var(--fz-xxs);
       line-height: 1.75;
 
@@ -165,7 +165,7 @@ const StyledProject = styled.li`
   }
 `;
 
-const Projects = () => {
+const Education = () => {
   const data = useStaticQuery(graphql`
     query {
       projects: allMarkdownRemark(
@@ -312,4 +312,4 @@ const Projects = () => {
   );
 };
 
-export default Projects;
+export default Education;

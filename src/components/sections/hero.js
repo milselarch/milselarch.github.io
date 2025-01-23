@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
-// import styled from 'styled-components';
+import styled from 'styled-components';
 import { navDelay, loaderDelay } from '@utils';
 import { usePrefersReducedMotion } from '@hooks';
-import * as heroStyles from './hero.scss';
 
-/*
 const StyledHeroSection = styled.section`
   ${({ theme }) => theme.mixins.flexCenter};
   flex-direction: column;
@@ -22,7 +20,7 @@ const StyledHeroSection = styled.section`
   h1 {
     margin: 0 0 30px 4px;
     color: var(--green);
-    font-family: var(--font-mono);
+    font-family: var(--font-mono), sans-serif;
     font-size: clamp(var(--fz-sm), 5vw, var(--fz-md));
     font-weight: 400;
 
@@ -47,7 +45,6 @@ const StyledHeroSection = styled.section`
     margin-top: 50px;
   }
 `;
-*/
 
 const Hero = () => {
   const [isMounted, setIsMounted] = useState(false);
@@ -95,7 +92,7 @@ const Hero = () => {
   const items = [one, two, three, four];
 
   return (
-    <div className={`hero ${heroStyles.hero}`}>
+    <StyledHeroSection>
       {prefersReducedMotion ? (
         <>
           {items.map((item, i) => (
@@ -112,7 +109,7 @@ const Hero = () => {
             ))}
         </TransitionGroup>
       )}
-    </div>
+    </StyledHeroSection>
   );
 };
 
