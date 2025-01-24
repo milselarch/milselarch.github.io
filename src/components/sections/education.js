@@ -1,187 +1,184 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useStaticQuery, graphql } from 'gatsby';
-import { CSSTransition, TransitionGroup } from 'react-transition-group';
+import { CSSTransition } from 'react-transition-group';
 import styled from 'styled-components';
 import { srConfig } from '@config';
+import { KEY_CODES } from '@utils';
 import sr from '@utils/sr';
-import { Icon } from '@components/icons';
 import { usePrefersReducedMotion } from '@hooks';
 
-const StyledProjectsSection = styled.section`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+const StyledJobsSection = styled.section`
+  max-width: 700px;
 
-  h2 {
-    font-size: clamp(24px, 5vw, var(--fz-heading));
-  }
+  .inner {
+    display: flex;
 
-  .archive-link {
-    font-family: var(--font-mono);
-    font-size: var(--fz-sm);
-    &:after {
-      bottom: 0.1em;
+    @media (max-width: 600px) {
+      display: block;
     }
-  }
 
-  .projects-grid {
-    ${({ theme }) => theme.mixins.resetList};
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    grid-gap: 15px;
-    position: relative;
-    margin-top: 50px;
-
-    @media (max-width: 1080px) {
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    // Prevent container from jumping
+    @media (min-width: 700px) {
+      min-height: 340px;
     }
-  }
-
-  .more-button {
-    ${({ theme }) => theme.mixins.button};
-    margin: 80px auto 0;
   }
 `;
 
-const StyledProject = styled.li`
+const StyledTabList = styled.div`
   position: relative;
-  cursor: default;
-  transition: var(--transition);
+  z-index: 3;
+  width: max-content;
+  padding: 0;
+  margin: 0;
+  list-style: none;
 
-  @media (prefers-reduced-motion: no-preference) {
-    &:hover,
-    &:focus-within {
-      .project-inner {
-        transform: translateY(-7px);
-      }
-    }
-  }
-
-  a {
-    position: relative;
-    z-index: 1;
-  }
-
-  .project-inner {
-    ${({ theme }) => theme.mixins.boxShadow};
-    ${({ theme }) => theme.mixins.flexBetween};
-    flex-direction: column;
-    align-items: flex-start;
-    position: relative;
-    height: 100%;
-    padding: 2rem 1.75rem;
-    border-radius: var(--border-radius);
-    background-color: var(--light-navy);
-    transition: var(--transition);
-    overflow: auto;
-  }
-
-  .project-top {
-    ${({ theme }) => theme.mixins.flexBetween};
-    margin-bottom: 35px;
-
-    .folder {
-      color: var(--green);
-      svg {
-        width: 40px;
-        height: 40px;
-      }
-    }
-
-    .project-links {
-      display: flex;
-      align-items: center;
-      margin-right: -10px;
-      color: var(--light-slate);
-
-      a {
-        ${({ theme }) => theme.mixins.flexCenter};
-        padding: 5px 7px;
-
-        &.external {
-          svg {
-            width: 22px;
-            height: 22px;
-            margin-top: -4px;
-          }
-        }
-
-        svg {
-          width: 20px;
-          height: 20px;
-        }
-      }
-    }
-  }
-
-  .project-title {
-    margin: 0 0 10px;
-    color: var(--lightest-slate);
-    font-size: var(--fz-xxl);
-
-    a {
-      position: static;
-
-      &:before {
-        content: '';
-        display: block;
-        position: absolute;
-        z-index: 0;
-        width: 100%;
-        height: 100%;
-        top: 0;
-        left: 0;
-      }
-    }
-  }
-
-  .project-description {
-    color: var(--light-slate);
-    font-size: 17px;
-
-    a {
-      ${({ theme }) => theme.mixins.inlineLink};
-    }
-  }
-
-  .project-tech-list {
+  @media (max-width: 600px) {
     display: flex;
-    align-items: flex-end;
-    flex-grow: 1;
-    flex-wrap: wrap;
-    padding: 0;
-    margin: 20px 0 0 0;
-    list-style: none;
+    overflow-x: auto;
+    width: calc(100% + 100px);
+    padding-left: 50px;
+    margin-left: -50px;
+    margin-bottom: 30px;
+  }
+  @media (max-width: 480px) {
+    width: calc(100% + 50px);
+    padding-left: 25px;
+    margin-left: -25px;
+  }
 
-    li {
-      font-family: var(--font-mono), sans-serif;
-      font-size: var(--fz-xxs);
-      line-height: 1.75;
-
-      &:not(:last-of-type) {
-        margin-right: 15px;
+  li {
+    &:first-of-type {
+      @media (max-width: 600px) {
+        margin-left: 50px;
+      }
+      @media (max-width: 480px) {
+        margin-left: 25px;
       }
     }
+    &:last-of-type {
+      @media (max-width: 600px) {
+        padding-right: 50px;
+      }
+      @media (max-width: 480px) {
+        padding-right: 25px;
+      }
+    }
+  }
+`;
+
+const StyledTabButton = styled.button`
+  ${({ theme }) => theme.mixins.link};
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: var(--tab-height);
+  padding: 0 20px 2px;
+  border-left: 2px solid var(--lightest-navy);
+  background-color: transparent;
+  color: ${({ isActive }) => (isActive ? 'var(--green)' : 'var(--slate)')};
+  font-family: var(--font-mono);
+  font-size: var(--fz-xs);
+  text-align: left;
+  white-space: nowrap;
+
+  @media (max-width: 768px) {
+    padding: 0 15px 2px;
+  }
+  @media (max-width: 600px) {
+    ${({ theme }) => theme.mixins.flexCenter};
+    min-width: 120px;
+    padding: 0 15px;
+    border-left: 0;
+    border-bottom: 2px solid var(--lightest-navy);
+    text-align: center;
+  }
+
+  &:hover,
+  &:focus {
+    background-color: var(--light-navy);
+  }
+`;
+
+const StyledHighlight = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  width: 2px;
+  height: var(--tab-height);
+  border-radius: var(--border-radius);
+  background: var(--green);
+  transform: translateY(calc(${({ activeTabId }) => activeTabId} * var(--tab-height)));
+  transition: transform 0.25s cubic-bezier(0.645, 0.045, 0.355, 1);
+  transition-delay: 0.1s;
+
+  @media (max-width: 600px) {
+    top: auto;
+    bottom: 0;
+    width: 100%;
+    max-width: var(--tab-width);
+    height: 2px;
+    margin-left: 50px;
+    transform: translateX(calc(${({ activeTabId }) => activeTabId} * var(--tab-width)));
+  }
+  @media (max-width: 480px) {
+    margin-left: 25px;
+  }
+`;
+
+const StyledTabPanels = styled.div`
+  position: relative;
+  width: 100%;
+  margin-left: 20px;
+
+  @media (max-width: 600px) {
+    margin-left: 0;
+  }
+`;
+
+const StyledTabPanel = styled.div`
+  width: 100%;
+  height: auto;
+  padding: 10px 5px;
+
+  ul {
+    ${({ theme }) => theme.mixins.fancyList};
+  }
+
+  h3 {
+    margin-bottom: 2px;
+    font-size: var(--fz-xxl);
+    font-weight: 500;
+    line-height: 1.3;
+
+    .company {
+      color: var(--green);
+    }
+  }
+
+  .range {
+    margin-bottom: 25px;
+    color: var(--light-slate);
+    font-family: var(--font-mono), sans-serif;
+    font-size: var(--fz-xs);
   }
 `;
 
 const Education = () => {
   const data = useStaticQuery(graphql`
     query {
-      projects: allMarkdownRemark(
-        filter: {
-          fileAbsolutePath: { regex: "/content/projects/" }
-          frontmatter: { showInProjects: { ne: false } }
-        }
+      places: allMarkdownRemark(
+        filter: { fileAbsolutePath: { regex: "/content/jobs/" } }
         sort: { fields: [frontmatter___date], order: DESC }
       ) {
         edges {
           node {
             frontmatter {
               title
-              tech
-              github
-              external
+              company
+              location
+              range
+              url
             }
             html
           }
@@ -190,11 +187,12 @@ const Education = () => {
     }
   `);
 
-  // const showMore = false;
-  const [showMore, setShowMore] = useState(false);
-  const revealTitle = useRef(null);
-  const revealArchiveLink = useRef(null);
-  const revealProjects = useRef([]);
+  const jobsData = data.places.edges;
+
+  const [activeTabId, setActiveTabId] = useState(0);
+  const [tabFocus, setTabFocus] = useState(null);
+  const tabs = useRef([]);
+  const revealContainer = useRef(null);
   const prefersReducedMotion = usePrefersReducedMotion();
 
   useEffect(() => {
@@ -202,113 +200,110 @@ const Education = () => {
       return;
     }
 
-    sr.reveal(revealTitle.current, srConfig());
-    sr.reveal(revealArchiveLink.current, srConfig());
-    revealProjects.current.forEach((ref, i) => sr.reveal(ref, srConfig(i * 100)));
+    sr.reveal(revealContainer.current, srConfig());
   }, []);
 
-  const GRID_LIMIT = 6;
-  const projects = data.projects.edges.filter(({ node }) => node);
-  const firstSix = projects.slice(0, GRID_LIMIT);
-  const projectsToShow = showMore ? projects : firstSix;
+  const focusTab = () => {
+    if (tabs.current[tabFocus]) {
+      tabs.current[tabFocus].focus();
+      return;
+    }
+    // If we're at the end, go to the start
+    if (tabFocus >= tabs.current.length) {
+      setTabFocus(0);
+    }
+    // If we're at the start, move to the end
+    if (tabFocus < 0) {
+      setTabFocus(tabs.current.length - 1);
+    }
+  };
 
-  const projectInner = node => {
-    const { frontmatter, html } = node;
-    const { github, external, title, tech } = frontmatter;
+  // Only re-run the effect if tabFocus changes
+  useEffect(() => focusTab(), [tabFocus]);
 
-    return (
-      <div className="project-inner">
-        <header>
-          <div className="project-top">
-            <div className="folder">
-              <Icon name="Folder" />
-            </div>
-            <div className="project-links">
-              {github && (
-                <a href={github} aria-label="GitHub Link" target="_blank" rel="noreferrer">
-                  <Icon name="GitHub" />
-                </a>
-              )}
-              {external && (
-                <a
-                  href={external}
-                  aria-label="External Link"
-                  className="external"
-                  target="_blank"
-                  rel="noreferrer">
-                  <Icon name="External" />
-                </a>
-              )}
-            </div>
-          </div>
+  // Focus on tabs when using up & down arrow keys
+  const onKeyDown = e => {
+    switch (e.key) {
+      case KEY_CODES.ARROW_UP: {
+        e.preventDefault();
+        setTabFocus(tabFocus - 1);
+        break;
+      }
 
-          <h3 className="project-title">
-            <a href={external} target="_blank" rel="noreferrer">
-              {title}
-            </a>
-          </h3>
+      case KEY_CODES.ARROW_DOWN: {
+        e.preventDefault();
+        setTabFocus(tabFocus + 1);
+        break;
+      }
 
-          <div className="project-description" dangerouslySetInnerHTML={{ __html: html }} />
-        </header>
-
-        <footer>
-          {tech && (
-            <ul className="project-tech-list">
-              {tech.map((tech, i) => (
-                <li key={i}>{tech}</li>
-              ))}
-            </ul>
-          )}
-        </footer>
-      </div>
-    );
+      default: {
+        break;
+      }
+    }
   };
 
   return (
-    <StyledProjectsSection>
-      <h2 ref={revealTitle}>Other Noteworthy Projects</h2>
+    <StyledJobsSection id="education" ref={revealContainer}>
+      <h2 className="numbered-heading">Education</h2>
 
-      {/*
-      <Link className="inline-link archive-link" to="/archive" ref={revealArchiveLink}>
-        view the archive
-      </Link>
-      */}
-
-      <ul className="projects-grid">
-        {prefersReducedMotion ? (
-          <>
-            {projectsToShow &&
-              projectsToShow.map(({ node }, i) => (
-                <StyledProject key={i}>{projectInner(node)}</StyledProject>
-              ))}
-          </>
-        ) : (
-          <TransitionGroup component={null}>
-            {projectsToShow &&
-              projectsToShow.map(({ node }, i) => (
-                <CSSTransition
+      <div className="inner">
+        <StyledTabList role="tablist" aria-label="Job tabs" onKeyDown={e => onKeyDown(e)}>
+          {jobsData &&
+            jobsData.map(({ node }, i) => {
+              const { company } = node.frontmatter;
+              return (
+                <StyledTabButton
                   key={i}
-                  classNames="fadeup"
-                  timeout={i >= GRID_LIMIT ? (i - GRID_LIMIT) * 300 : 300}
-                  exit={false}>
-                  <StyledProject
-                    key={i}
-                    ref={el => (revealProjects.current[i] = el)}
-                    style={{
-                      transitionDelay: `${i >= GRID_LIMIT ? (i - GRID_LIMIT) * 100 : 0}ms`,
-                    }}>
-                    {projectInner(node)}
-                  </StyledProject>
-                </CSSTransition>
-              ))}
-          </TransitionGroup>
-        )}
-      </ul>
+                  isActive={activeTabId === i}
+                  onClick={() => setActiveTabId(i)}
+                  ref={el => (tabs.current[i] = el)}
+                  id={`tab-${i}`}
+                  role="tab"
+                  tabIndex={activeTabId === i ? '0' : '-1'}
+                  aria-selected={activeTabId === i}
+                  aria-controls={`panel-${i}`}>
+                  <span>{company}</span>
+                </StyledTabButton>
+              );
+            })}
+          <StyledHighlight activeTabId={activeTabId} />
+        </StyledTabList>
 
-      <button className="more-button" onClick={() => setShowMore(!showMore)}>
-        Show {showMore ? 'Less' : 'More'}
-      </button>
-    </StyledProjectsSection>
+        <StyledTabPanels>
+          {jobsData &&
+            jobsData.map(({ node }, i) => {
+              const { frontmatter, html } = node;
+              const { title, url, company, range } = frontmatter;
+
+              return (
+                <CSSTransition key={i} in={activeTabId === i} timeout={250} classNames="fade">
+                  <StyledTabPanel
+                    id={`panel-${i}`}
+                    role="tabpanel"
+                    tabIndex={activeTabId === i ? '0' : '-1'}
+                    aria-labelledby={`tab-${i}`}
+                    aria-hidden={activeTabId !== i}
+                    hidden={activeTabId !== i}>
+                    <h3>
+                      <span>{title}</span>
+                      <span className="company">
+                        &nbsp;@&nbsp;
+                        <a href={url} className="inline-link">
+                          {company}
+                        </a>
+                      </span>
+                    </h3>
+
+                    <p className="range">{range}</p>
+
+                    <div dangerouslySetInnerHTML={{ __html: html }} />
+                  </StyledTabPanel>
+                </CSSTransition>
+              );
+            })}
+        </StyledTabPanels>
+      </div>
+    </StyledJobsSection>
   );
 };
 
