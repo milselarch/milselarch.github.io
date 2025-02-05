@@ -7,6 +7,8 @@ import { KEY_CODES } from '@utils';
 import sr from '@utils/sr';
 import { usePrefersReducedMotion } from '@hooks';
 
+const EMPTY_TAB_ID = -1;
+
 const StyledJobsSection = styled.section`
   max-width: 700px;
 
@@ -218,7 +220,8 @@ const Jobs = () => {
   // eslint-disable-next-line no-console
   console.log('EDUCATION DATA', educationData);
 
-  const [activeTabId, setActiveTabId] = useState(0);
+  const [activeJobsTabId, setActiveJobsTabId] = useState(0);
+  const [activeEducationTabId, setActiveEducationTabId] = useState(-1);
   const [tabFocus, setTabFocus] = useState(null);
   const tabs = useRef([]);
   const revealContainer = useRef(null);
@@ -271,6 +274,11 @@ const Jobs = () => {
     }
   };
 
+  const setTabIndexes = (jobIndex, educationIndex) => {
+    setActiveJobsTabId(jobIndex);
+    setActiveEducationTabId(educationIndex);
+  };
+
   return (
     <StyledJobsSection id="jobs" ref={revealContainer}>
       <h2 className="numbered-heading">
@@ -288,19 +296,19 @@ const Jobs = () => {
                 return (
                   <StyledTabButton
                     key={i}
-                    isActive={activeTabId === i}
-                    onClick={() => setActiveTabId(i)}
+                    isActive={activeJobsTabId === i}
+                    onClick={() => setTabIndexes(i, EMPTY_TAB_ID)}
                     ref={el => (tabs.current[i] = el)}
                     id={`tab-${i}`}
                     role="tab"
-                    tabIndex={activeTabId === i ? '0' : '-1'}
-                    aria-selected={activeTabId === i}
+                    tabIndex={activeJobsTabId === i ? '0' : '-1'}
+                    aria-selected={activeJobsTabId === i}
                     aria-controls={`panel-${i}`}>
                     <span>{company}</span>
                   </StyledTabButton>
                 );
               })}
-            <StyledHighlight activeTabId={activeTabId} />
+            {activeJobsTabId !== EMPTY_TAB_ID && <StyledHighlight activeTabId={activeJobsTabId} />}
           </StyledTabList>
 
           <br className="padding" />
@@ -313,55 +321,99 @@ const Jobs = () => {
                 return (
                   <StyledTabButton
                     key={i}
-                    isActive={activeTabId === i}
-                    onClick={() => setActiveTabId(i)}
+                    isActive={activeEducationTabId === i}
+                    onClick={() => setTabIndexes(EMPTY_TAB_ID, i)}
                     ref={el => (tabs.current[i] = el)}
                     id={`tab-${i}`}
                     role="tab"
-                    tabIndex={activeTabId === i ? '0' : '-1'}
-                    aria-selected={activeTabId === i}
+                    tabIndex={activeEducationTabId === i ? '0' : '-1'}
+                    aria-selected={activeEducationTabId === i}
                     aria-controls={`panel-${i}`}>
                     <span>{company}</span>
                   </StyledTabButton>
                 );
               })}
-            <StyledHighlight activeTabId={activeTabId} />
+            {activeEducationTabId !== EMPTY_TAB_ID && (
+              <StyledHighlight activeTabId={activeEducationTabId} />
+            )}
           </StyledTabList>
         </div>
 
-        <StyledTabPanels>
-          {jobsData &&
-            jobsData.map(({ node }, i) => {
-              const { frontmatter, html } = node;
-              const { title, url, company, range } = frontmatter;
+        {activeJobsTabId !== EMPTY_TAB_ID && (
+          <StyledTabPanels>
+            {jobsData &&
+              jobsData.map(({ node }, i) => {
+                const { frontmatter, html } = node;
+                const { title, url, company, range } = frontmatter;
 
-              return (
-                <CSSTransition key={i} in={activeTabId === i} timeout={250} classNames="fade">
-                  <StyledTabPanel
-                    id={`panel-${i}`}
-                    role="tabpanel"
-                    tabIndex={activeTabId === i ? '0' : '-1'}
-                    aria-labelledby={`tab-${i}`}
-                    aria-hidden={activeTabId !== i}
-                    hidden={activeTabId !== i}>
-                    <h3>
-                      <span>{title}</span>
-                      <span className="company">
-                        &nbsp;@&nbsp;
-                        <a href={url} className="inline-link">
-                          {company}
-                        </a>
-                      </span>
-                    </h3>
+                return (
+                  <CSSTransition key={i} in={activeJobsTabId === i} timeout={250} classNames="fade">
+                    <StyledTabPanel
+                      id={`panel-${i}`}
+                      role="tabpanel"
+                      tabIndex={activeJobsTabId === i ? '0' : '-1'}
+                      aria-labelledby={`tab-${i}`}
+                      aria-hidden={activeJobsTabId !== i}
+                      hidden={activeJobsTabId !== i}>
+                      <h3>
+                        <span>{title}</span>
+                        <span className="company">
+                          &nbsp;@&nbsp;
+                          <a href={url} className="inline-link">
+                            {company}
+                          </a>
+                        </span>
+                      </h3>
 
-                    <p className="range">{range}</p>
+                      <p className="range">{range}</p>
 
-                    <div dangerouslySetInnerHTML={{ __html: html }} />
-                  </StyledTabPanel>
-                </CSSTransition>
-              );
-            })}
-        </StyledTabPanels>
+                      <div dangerouslySetInnerHTML={{ __html: html }} />
+                    </StyledTabPanel>
+                  </CSSTransition>
+                );
+              })}
+          </StyledTabPanels>
+        )}
+
+        {activeEducationTabId !== EMPTY_TAB_ID && (
+          <StyledTabPanels>
+            {educationData &&
+              educationData.map(({ node }, i) => {
+                const { frontmatter, html } = node;
+                const { title, url, company, range } = frontmatter;
+
+                return (
+                  <CSSTransition
+                    key={i}
+                    in={activeEducationTabId === i}
+                    timeout={250}
+                    classNames="fade">
+                    <StyledTabPanel
+                      id={`panel-${i}`}
+                      role="tabpanel"
+                      tabIndex={activeEducationTabId === i ? '0' : '-1'}
+                      aria-labelledby={`tab-${i}`}
+                      aria-hidden={activeEducationTabId !== i}
+                      hidden={activeEducationTabId !== i}>
+                      <h3>
+                        <span>{title}</span>
+                        <span className="company">
+                          &nbsp;@&nbsp;
+                          <a href={url} className="inline-link">
+                            {company}
+                          </a>
+                        </span>
+                      </h3>
+
+                      <p className="range">{range}</p>
+
+                      <div dangerouslySetInnerHTML={{ __html: html }} />
+                    </StyledTabPanel>
+                  </CSSTransition>
+                );
+              })}
+          </StyledTabPanels>
+        )}
       </div>
     </StyledJobsSection>
   );

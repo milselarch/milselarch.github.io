@@ -1,11 +1,13 @@
 ---
 date: '2024-06-18'
-title: 'Software Developer'
-company: 'Concorde Security'
+title: 'Degree in Computer Science and Design'
+company: 'SUTD'
 location: 'Singapore, Singapore'
 range: 'June 2024 - Present'
 url: 'https://www.concordesecurity.com/'
 ---
+
+Grade: 4.61 / 5.0 GPA (First Class Honours)
 
 - Developed API endpoints for Concorde’s Visitor Management System (VMS)
   using Python, Django, and PostgreSQL.

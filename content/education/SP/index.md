@@ -1,11 +1,13 @@
 ---
 date: '2022-08-29'
-title: 'Full-stack Developer Intern'
-company: 'Panasonic R&D Center'
+title: 'Diploma in Computer Engineering'
+company: 'SP'
 location: 'Singapore, Singapore'
 range: 'August - December 2022'
-url: 'https://research.sg.panasonic.com/'
+url: 'https://www.sp.edu.sg/'
 ---
+
+Grade: 3.97 / 4.0 GPA (Diploma with Merit)
 
 - Developed a single-page application (SPA) mobile web-app using a MySQL, VueJS,
   and Flask (python backend) web stack that allowed users to interact with,
