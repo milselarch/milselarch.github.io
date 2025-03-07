@@ -19,7 +19,7 @@ const StyledHeroSection = styled.section`
 
   h1 {
     margin: 0 0 30px 4px;
-    color: var(--green);
+    color: var(--highlight);
     font-family: var(--font-mono), sans-serif;
     font-size: clamp(var(--fz-sm), 5vw, var(--fz-md));
     font-weight: 400;

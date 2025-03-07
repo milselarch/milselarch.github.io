@@ -71,7 +71,7 @@ const StyledProject = styled.li`
     height: 100%;
     padding: 2rem 1.75rem;
     border-radius: var(--border-radius);
-    background-color: var(--light-navy);
+    background-color: var(--foreground-color);
     transition: var(--transition);
     overflow: auto;
   }
@@ -81,7 +81,8 @@ const StyledProject = styled.li`
     margin-bottom: 35px;
 
     .folder {
-      color: var(--green);
+      color: var(--highlight);
+
       svg {
         width: 40px;
         height: 40px;
@@ -116,7 +117,7 @@ const StyledProject = styled.li`
 
   .project-title {
     margin: 0 0 10px;
-    color: var(--lightest-slate);
+    color: var(--lighter-slate);
     font-size: var(--fz-xxl);
 
     a {
