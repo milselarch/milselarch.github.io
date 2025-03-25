@@ -38,7 +38,7 @@ const StyledPostContent = styled.div`
   }
 
   code {
-    background-color: var(--lightest-fg);
+    background-color: var(--text-highlight);
     color: var(--lighter-slate);
     border-radius: var(--border-radius);
     font-size: var(--fz-sm);

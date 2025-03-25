@@ -17,9 +17,9 @@ const prismColors = {
 
 const PrismStyles = css`
   /**
-  * Add back the container background-color, border-radius, padding, margin
-  * and overflow that we removed from <pre>.
-  */
+    * Add back the container background-color, border-radius, padding, margin
+    * and overflow that we removed from <pre>.
+    */
 
   .gatsby-highlight {
     background-color: ${prismColors.bg};
@@ -47,12 +47,12 @@ const PrismStyles = css`
   }
 
   /**
-  * Remove the default PrismJS theme background-color, border-radius, margin,
-  * padding and overflow.
-  * 1. Make the element just wide enough to fit its content.
-  * 2. Always fill the visible space in .gatsby-highlight.
-  * 3. Adjust the position of the line numbers
-  */
+    * Remove the default PrismJS theme background-color, border-radius, margin,
+    * padding and overflow.
+    * 1. Make the element just wide enough to fit its content.
+    * 2. Always fill the visible space in .gatsby-highlight.
+    * 3. Adjust the position of the line numbers
+    */
 
   .gatsby-highlight pre[class*='language-'] {
     background-color: transparent;
@@ -98,7 +98,7 @@ const PrismStyles = css`
   /* Language badges */
 
   .gatsby-highlight pre[class*='language-']::before {
-    background: var(--lightest-fg);
+    background: var(--text-highlight);
     color: var(--lightest-slate);
     font-size: var(--fz-xxs);
     font-family: var(--font-mono);

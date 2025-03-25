@@ -84,7 +84,7 @@ const StyledTabButton = styled.button`
   width: 100%;
   height: var(--tab-height);
   padding: 0 20px 2px;
-  border-left: 2px solid var(--lightest-fg);
+  border-left: 2px solid var(--text-highlight);
   background-color: transparent;
   color: ${({ isActive }) => (isActive ? 'var(--green)' : 'var(--slate)')};
   font-family: var(--font-mono);
@@ -100,7 +100,7 @@ const StyledTabButton = styled.button`
     min-width: 120px;
     padding: 0 15px;
     border-left: 0;
-    border-bottom: 2px solid var(--lightest-fg);
+    border-bottom: 2px solid var(--text-highlight);
     text-align: center;
   }
 
@@ -289,7 +289,10 @@ const Jobs = () => {
       <div className="inner">
         <div className="tabs">
           <h4> Job History </h4>
-          <StyledTabList role="tablist" aria-label="Job tabs" onKeyDown={e => onKeyDown(e)}>
+          <StyledTabList
+            role="tablist" aria-label="Job tabs" onKeyDown={e => onKeyDown(e)}
+            className="w-full"
+          >
             {jobsData &&
               jobsData.map(({ node }, i) => {
                 const { company } = node.frontmatter;
@@ -314,7 +317,10 @@ const Jobs = () => {
           <br className="padding" />
 
           <h4> Education </h4>
-          <StyledTabList role="tablist" aria-label="Education tabs" onKeyDown={e => onKeyDown(e)}>
+          <StyledTabList
+            role="tablist" aria-label="Education tabs" onKeyDown={e => onKeyDown(e)}
+            className="w-full"
+          >
             {educationData &&
               educationData.map(({ node }, i) => {
                 const { company } = node.frontmatter;

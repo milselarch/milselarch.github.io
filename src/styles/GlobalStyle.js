@@ -25,7 +25,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   ::selection {
-    background-color: var(--lightest-fg);
+    background-color: var(--text-highlight);
     color: var(--lighter-slate);
   }
 
@@ -220,7 +220,7 @@ const GlobalStyle = createGlobalStyle`
       width: 300px;
       height: 1px;
       margin-left: 20px;
-      background-color: var(--lightest-fg);
+      background-color: var(--text-highlight);
 
       @media (max-width: 1080px) {
         width: 200px;
@@ -356,7 +356,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   hr {
-    background-color: var(--lightest-fg);
+    background-color: var(--text-highlight);
     height: 1px;
     border-width: 0px;
     border-style: initial;
