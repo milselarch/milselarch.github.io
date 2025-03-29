@@ -1,6 +1,8 @@
 import React from 'react';
+// import * as Logo from '../../images/logo.svg'; // Adjust the path to your SVG file
 
 const IconLogo = () => (
+  /*  <Logo /> */
   <svg id="logo" xmlns="http://www.w3.org/2000/svg" role="img" viewBox="0 0 84 96">
     <title>Logo</title>
     <g transform="translate(-8.000000, -2.000000)">
