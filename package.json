@@ -11,7 +11,9 @@
     "gatsby"
   ],
   "license": "MIT",
-  "browserslist": "> 0.25%, not dead",
+  "browserslist": [
+    "> 0.25%, not dead"
+  ],
   "scripts": {
     "build": "gatsby build",
     "develop": "gatsby develop",
@@ -26,7 +28,7 @@
     "*.{js,css,json,md}": [
       "prettier --write"
     ],
-    "*.js": [
+    "*.{js,ts,tsx}": [
       "eslint --fix"
     ]
   },
@@ -61,21 +63,34 @@
     "scrollreveal": "^4.0.5",
     "styled-components": "^5.3.0"
   },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
   "devDependencies": {
     "@babel/core": "^7.14.0",
     "@babel/eslint-parser": "^7.13.14",
     "@babel/preset-react": "^7.13.13",
+    "@typescript-eslint/eslint-plugin": "^8.28.0",
+    "@typescript-eslint/parser": "^8.28.0",
     "@upstatement/eslint-config": "^1.0.0",
     "@upstatement/prettier-config": "^1.0.0",
     "babel-preset-gatsby": "^1.4.0",
-    "eslint": "^7.25.0",
-    "eslint-config-prettier": "^8.3.0",
+    "eslint": "^8.57.1",
+    "eslint-config-prettier": "^8.10.0",
+    "eslint-config-standard": "^17.1.0",
+    "eslint-plugin-import": "^2.25.2",
     "eslint-plugin-jsx-a11y": "^6.4.1",
-    "eslint-plugin-react": "^7.23.2",
+    "eslint-plugin-n": "^15.0.0 || ^16.0.0 ",
+    "eslint-plugin-promise": "^6.0.0",
+    "eslint-plugin-react": "^7.37.4",
     "gatsby-remark-code-titles": "^1.1.0",
     "husky": "^6.0.0",
     "lint-staged": "^10.1.2",
     "prettier": "^2.2.1",
-    "sass": "^1.83.4"
+    "sass": "^1.83.4",
+    "typescript": "^5.8.2"
   }
 }

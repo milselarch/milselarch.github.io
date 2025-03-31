@@ -38,7 +38,7 @@ const StyledJobsSection = styled.section`
 const StyledTabList = styled.div`
   position: relative;
   z-index: 3;
-  width: max-content;
+  width: auto;
   padding: 0;
   margin: 0;
   list-style: none;
@@ -310,8 +310,11 @@ const Jobs = () => {
                     <span>{company}</span>
                   </StyledTabButton>
                 );
-              })}
-            {activeJobsTabId !== EMPTY_TAB_ID && <StyledHighlight activeTabId={activeJobsTabId} />}
+              })
+            }
+            {(activeJobsTabId !== EMPTY_TAB_ID) &&
+              <StyledHighlight activeTabId={activeJobsTabId} />
+            }
           </StyledTabList>
 
           <br className="padding" />
