@@ -6,10 +6,12 @@ module.exports = {
       name: 'GitHub',
       url: 'https://github.com/milselarch',
     },
+    /*
     {
       name: 'Linkedin',
       url: 'https://www.linkedin.com/in/limthianyew',
     },
+    */
   ],
 
   navLinks: [
