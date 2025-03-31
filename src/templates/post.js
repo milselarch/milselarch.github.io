@@ -17,6 +17,7 @@ const StyledPostHeader = styled.header`
 `;
 const StyledPostContent = styled.div`
   margin-bottom: 100px;
+
   h1,
   h2,
   h3,
@@ -37,8 +38,8 @@ const StyledPostContent = styled.div`
   }
 
   code {
-    background-color: var(--lightest-navy);
-    color: var(--lightest-slate);
+    background-color: var(--text-highlight);
+    color: var(--lighter-slate);
     border-radius: var(--border-radius);
     font-size: var(--fz-sm);
     padding: 0.2em 0.4em;
@@ -99,7 +100,7 @@ PostTemplate.propTypes = {
 };
 
 export const pageQuery = graphql`
-  query($path: String!) {
+  query ($path: String!) {
     markdownRemark(frontmatter: { slug: { eq: $path } }) {
       html
       frontmatter {

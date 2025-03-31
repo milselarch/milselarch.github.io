@@ -17,7 +17,7 @@ const StyledHeader = styled.header`
   padding: 0px 50px;
   width: 100%;
   height: var(--nav-height);
-  background-color: rgba(10, 25, 47, 0.85);
+  background-color: rgba(23, 23, 23, 0.85);
   filter: none !important;
   pointer-events: auto !important;
   user-select: auto !important;
@@ -38,8 +38,8 @@ const StyledHeader = styled.header`
       css`
         height: var(--nav-scroll-height);
         transform: translateY(0px);
-        background-color: rgba(10, 25, 47, 0.85);
-        box-shadow: 0 10px 30px -10px var(--navy-shadow);
+        background-color: rgba(23, 23, 23, 0.85);
+        box-shadow: 0 10px 30px -10px var(--foreground-color);
       `};
 
     ${props =>
@@ -48,7 +48,7 @@ const StyledHeader = styled.header`
       css`
         height: var(--nav-scroll-height);
         transform: translateY(calc(var(--nav-scroll-height) * -1));
-        box-shadow: 0 10px 30px -10px var(--navy-shadow);
+        box-shadow: 0 10px 30px -10px var(--foreground-color);
       `};
   }
 `;
@@ -57,7 +57,7 @@ const StyledNav = styled.nav`
   ${({ theme }) => theme.mixins.flexBetween};
   position: relative;
   width: 100%;
-  color: var(--lightest-slate);
+  color: var(--lighter-slate);
   font-family: var(--font-mono);
   counter-reset: item 0;
   z-index: 12;
@@ -66,7 +66,7 @@ const StyledNav = styled.nav`
     ${({ theme }) => theme.mixins.flexCenter};
 
     a {
-      color: var(--green);
+      color: var(--highlight);
       width: 42px;
       height: 42px;
       position: relative;
@@ -85,14 +85,16 @@ const StyledNav = styled.nav`
       .logo-container {
         position: relative;
         z-index: 1;
+
         svg {
           fill: none;
           user-select: none;
           @media (prefers-reduced-motion: no-preference) {
             transition: var(--transition);
           }
+
           polygon {
-            fill: var(--navy);
+            fill: var(--dark-bg);
           }
         }
       }
@@ -101,6 +103,7 @@ const StyledNav = styled.nav`
       &:focus {
         outline: 0;
         transform: translate(-4px, -4px);
+
         .hex-container {
           transform: translate(4px, 3px);
         }
@@ -135,7 +138,7 @@ const StyledLinks = styled.div`
         &:before {
           content: '0' counter(item) '.';
           margin-right: 5px;
-          color: var(--green);
+          color: var(--highlight);
           font-size: var(--fz-xxs);
           text-align: right;
         }
@@ -185,18 +188,12 @@ const Nav = ({ isHome }) => {
     <div className="logo" tabIndex="-1">
       {isHome ? (
         <a href="/" aria-label="home">
-          <div className="hex-container">
-            <IconHex />
-          </div>
           <div className="logo-container">
             <IconLogo />
           </div>
         </a>
       ) : (
         <Link to="/" aria-label="home">
-          <div className="hex-container">
-            <IconHex />
-          </div>
           <div className="logo-container">
             <IconLogo />
           </div>

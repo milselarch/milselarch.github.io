@@ -29,7 +29,7 @@ const StyledTableContainer = styled.div`
     tbody tr {
       &:hover,
       &:focus {
-        background-color: var(--light-navy);
+        background-color: var(--foreground-color);
       }
     }
 
@@ -45,6 +45,7 @@ const StyledTableContainer = styled.div`
           padding-left: 10px;
         }
       }
+
       &:last-child {
         padding-right: 20px;
 
@@ -66,6 +67,7 @@ const StyledTableContainer = styled.div`
         border-top-left-radius: var(--border-radius);
         border-bottom-left-radius: var(--border-radius);
       }
+
       td:last-child {
         border-top-right-radius: var(--border-radius);
         border-bottom-right-radius: var(--border-radius);
@@ -85,7 +87,7 @@ const StyledTableContainer = styled.div`
       &.title {
         padding-top: 15px;
         padding-right: 20px;
-        color: var(--lightest-slate);
+        color: var(--lighter-slate);
         font-size: var(--fz-xl);
         font-weight: 600;
         line-height: 1.25;
@@ -100,9 +102,11 @@ const StyledTableContainer = styled.div`
         font-size: var(--fz-xxs);
         font-family: var(--font-mono);
         line-height: 1.5;
+
         .separator {
           margin: 0 5px;
         }
+
         span {
           display: inline-block;
         }
@@ -170,16 +174,8 @@ const ArchivePage = ({ location, data }) => {
             <tbody>
               {projects.length > 0 &&
                 projects.map(({ node }, i) => {
-                  const {
-                    date,
-                    github,
-                    external,
-                    ios,
-                    android,
-                    title,
-                    tech,
-                    company,
-                  } = node.frontmatter;
+                  const { date, github, external, ios, android, title, tech, company } =
+                    node.frontmatter;
                   return (
                     <tr key={i} ref={el => (revealProjects.current[i] = el)}>
                       <td className="overline year">{`${new Date(date).getFullYear()}`}</td>

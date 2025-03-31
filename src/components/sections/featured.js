@@ -56,6 +56,7 @@ const StyledProject = styled.li`
         padding: 25px 25px 20px;
       }
     }
+
     .project-tech-list {
       justify-content: flex-end;
 
@@ -71,6 +72,7 @@ const StyledProject = styled.li`
         }
       }
     }
+
     .project-links {
       justify-content: flex-end;
       margin-left: 0;
@@ -82,6 +84,7 @@ const StyledProject = styled.li`
         margin-right: 0;
       }
     }
+
     .project-image {
       grid-column: 1 / 8;
 
@@ -117,14 +120,14 @@ const StyledProject = styled.li`
 
   .project-overline {
     margin: 10px 0;
-    color: var(--green);
+    color: var(--highlight);
     font-family: var(--font-mono);
     font-size: var(--fz-xs);
     font-weight: 400;
   }
 
   .project-title {
-    color: var(--lightest-slate);
+    color: var(--lighter-slate);
     font-size: clamp(24px, 5vw, 28px);
 
     @media (min-width: 768px) {
@@ -132,7 +135,7 @@ const StyledProject = styled.li`
     }
 
     @media (max-width: 768px) {
-      color: var(--white);
+      color: var(--lightest-slate);
 
       a {
         position: static;
@@ -157,7 +160,7 @@ const StyledProject = styled.li`
     z-index: 2;
     padding: 25px;
     border-radius: var(--border-radius);
-    background-color: var(--light-navy);
+    background-color: var(--foreground-color);
     color: var(--light-slate);
     font-size: var(--fz-lg);
 
@@ -176,7 +179,7 @@ const StyledProject = styled.li`
     }
 
     strong {
-      color: var(--white);
+      color: var(--lightest-slate);
       font-weight: normal;
     }
   }
@@ -203,7 +206,7 @@ const StyledProject = styled.li`
 
       li {
         margin: 0 10px 5px 0;
-        color: var(--lightest-slate);
+        color: var(--lighter-slate);
       }
     }
   }
@@ -214,7 +217,7 @@ const StyledProject = styled.li`
     position: relative;
     margin-top: 10px;
     margin-left: -10px;
-    color: var(--lightest-slate);
+    color: var(--lighter-slate);
 
     a {
       ${({ theme }) => theme.mixins.flexCenter};
@@ -256,7 +259,7 @@ const StyledProject = styled.li`
     a {
       width: 100%;
       height: 100%;
-      background-color: var(--green);
+      background-color: var(--highlight);
       border-radius: var(--border-radius);
       vertical-align: middle;
 
@@ -283,7 +286,7 @@ const StyledProject = styled.li`
         bottom: 0;
         z-index: 3;
         transition: var(--transition);
-        background-color: var(--navy);
+        background-color: var(--dark-bg);
         mix-blend-mode: screen;
       }
     }

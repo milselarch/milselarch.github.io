@@ -13,8 +13,8 @@ const StyledMainContainer = styled.main`
   flex-direction: column;
 `;
 const StyledTitle = styled.h1`
-  color: var(--green);
-  font-family: var(--font-mono);
+  color: var(--highlight);
+  font-family: var(--font-mono), sans-serif;
   font-size: clamp(100px, 25vw, 200px);
   line-height: 1;
 `;
