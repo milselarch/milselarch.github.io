@@ -21,13 +21,14 @@ module.exports = {
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
-        name: 'Brittany Chiang',
-        short_name: 'Brittany Chiang',
+        name: 'Lim Thian Yew',
+        short_name: 'Charles Lim',
         start_url: '/',
+        // TODO: change this to dark red and red / black
         background_color: config.colors.darkNavy,
         theme_color: config.colors.navy,
         display: 'minimal-ui',
-        icon: 'src/images/logo.png',
+        icon: 'src/images/personal-logo.svg',
       },
     },
     `gatsby-plugin-offline`,
