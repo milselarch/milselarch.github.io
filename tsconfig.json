@@ -1,8 +1,0 @@
-{
-  "compilerOptions": {
-    "esModuleInterop": true,
-    // other options...
-    "jsx": "react"
-  },
-  "include": ["src/", "src/declarations.d.ts"]
-}
