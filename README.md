@@ -58,22 +58,25 @@ licensed under GPLv3.
 
 ## Todo list
 
-- Don't hyperlink companies without actual links
-- Remove / change splash screen
-- change out featured projects content
-- Change other projects content
-- build and deploy website
+- connect own domain to the github pages website
+- only show linkedin link for portfolio.milselarch.com
+- add github action to do deployment automatically
+- Change codebase to use TypeScript instead of JavaScript
+- Change the color scheme again (black and red tints)
 
 ## Todo stretch goals list
 
-- Change the color scheme
 - Re-appropriate and re-add projects archive page
-- change codebase to use TypeScript instead of JavaScript
-- Change logo to my own
 - add and draw fancy parallax wallpaper on the intro
 
 ## Todos done
 
+- [x] Change the color scheme (red and blank tints)
+- [x] Change logo to my own
+- [x] Remove / change splash screen
+- [x] change out featured projects content
+- [x] Change other projects content
+- [x] build and deploy website
 - [x] Change the intro content
 - [x] Change about me content
 - [x] change out job description content
