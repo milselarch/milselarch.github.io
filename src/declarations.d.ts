@@ -1,4 +1,29 @@
+import 'styled-components';
+
+import FlattenSimpleInterpolation from 'styled-components';
+
+
 declare module '*.svg' {
   const content: string;
   export default content;
+}
+
+declare module '*.woff' {
+  const src: string;
+  export default src;
+}
+
+declare module '*.woff2' {
+  const src: string;
+  export default src;
+}
+
+declare module 'styled-components' {
+  export interface DefaultTheme {
+    mixins: {
+      inlineLink: typeof FlattenSimpleInterpolation;
+      button: typeof FlattenSimpleInterpolation;
+      // Add other mixins as needed
+    };
+  }
 }
