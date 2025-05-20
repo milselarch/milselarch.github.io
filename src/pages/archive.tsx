@@ -3,11 +3,11 @@ import { graphql } from 'gatsby';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 import styled from 'styled-components';
-import { srConfig } from '@config';
-import sr from '@utils/sr';
-import { Layout } from '@components';
-import { Icon } from '@components/icons';
-import { usePrefersReducedMotion } from '@hooks';
+import { srConfig } from '@/config';
+import sr from '@/utils/sr';
+import { Layout } from '@/components';
+import { Icon } from '@/components/icons';
+import { usePrefersReducedMotion } from '@/hooks';
 
 const StyledTableContainer = styled.div`
   margin: 100px -20px;
@@ -177,7 +177,10 @@ const ArchivePage = ({ location, data }) => {
                   const { date, github, external, ios, android, title, tech, company } =
                     node.frontmatter;
                   return (
-                    <tr key={i} ref={el => (revealProjects.current[i] = el)}>
+                    <tr key={i} ref={el => {
+                      revealProjects.current[i] = el;
+                      return undefined;
+                    }}>
                       <td className="overline year">{`${new Date(date).getFullYear()}`}</td>
 
                       <td className="title">{title}</td>

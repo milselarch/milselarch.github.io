@@ -21,6 +21,12 @@ declare module '*.woff2' {
 declare module 'styled-components' {
   export interface DefaultTheme {
     mixins: {
+      bigButton: Interpolation<
+        FastOmit<Omit<GatsbyLinkProps<unknown>, 'ref'> & RefAttributes<Link<unknown>>, never>
+      >;
+      flexCenter: Interpolation<
+        FastOmit<DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement>, never>
+      >;
       inlineLink: typeof FlattenSimpleInterpolation;
       button: typeof FlattenSimpleInterpolation;
       // Add other mixins as needed
