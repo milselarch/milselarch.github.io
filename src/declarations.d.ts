@@ -2,7 +2,7 @@ import 'styled-components';
 
 import FlattenSimpleInterpolation, {FastOmit, Interpolation} from 'styled-components';
 import {GatsbyLinkProps, Link} from "gatsby";
-import {DetailedHTMLProps, HTMLAttributes, RefAttributes} from "react";
+import { ButtonHTMLAttributes, DetailedHTMLProps, HTMLAttributes, RefAttributes } from 'react';
 
 
 declare module '*.svg' {
@@ -23,6 +23,16 @@ declare module '*.woff2' {
 declare module 'styled-components' {
   export interface DefaultTheme {
     mixins: {
+      flexBetween: any;
+      smallButton: Interpolation<
+        FastOmit<DetailedHTMLProps<LiHTMLAttributes<HTMLLIElement>, HTMLLIElement>, never>
+      >;
+      resetList: Interpolation<
+        FastOmit<DetailedHTMLProps<HTMLAttributes<HTMLUListElement>, HTMLUListElement>, never>
+      >;
+      boxShadow: Interpolation<
+        FastOmit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, never>
+      >;
       link: Interpolation<
         FastOmit<
           DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>,
