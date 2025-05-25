@@ -1,27 +1,47 @@
 import { css } from 'styled-components';
 
+// @ts-ignore
 import CalibreRegularWoff from '@/fonts/Calibre/Calibre-Regular.woff';
+// @ts-ignore
 import CalibreRegularWoff2 from '@/fonts/Calibre/Calibre-Regular.woff2';
+// @ts-ignore
 import CalibreMediumWoff from '@/fonts/Calibre/Calibre-Medium.woff';
+// @ts-ignore
 import CalibreMediumWoff2 from '@/fonts/Calibre/Calibre-Medium.woff2';
+// @ts-ignore
 import CalibreSemiboldWoff from '@/fonts/Calibre/Calibre-Semibold.woff';
+// @ts-ignore
 import CalibreSemiboldWoff2 from '@/fonts/Calibre/Calibre-Semibold.woff2';
 
+// @ts-ignore
 import CalibreRegularItalicWoff from '@/fonts/Calibre/Calibre-RegularItalic.woff';
+// @ts-ignore
 import CalibreRegularItalicWoff2 from '@/fonts/Calibre/Calibre-RegularItalic.woff2';
+// @ts-ignore
 import CalibreMediumItalicWoff from '@/fonts/Calibre/Calibre-MediumItalic.woff';
+// @ts-ignore
 import CalibreMediumItalicWoff2 from '@/fonts/Calibre/Calibre-MediumItalic.woff2';
+// @ts-ignore
 import CalibreSemiboldItalicWoff from '@/fonts/Calibre/Calibre-SemiboldItalic.woff';
+// @ts-ignore
 import CalibreSemiboldItalicWoff2 from '@/fonts/Calibre/Calibre-SemiboldItalic.woff2';
 
+// @ts-ignore
 import SFMonoRegularWoff from '@/fonts/SFMono/SFMono-Regular.woff';
+// @ts-ignore
 import SFMonoRegularWoff2 from '@/fonts/SFMono/SFMono-Regular.woff2';
+// @ts-ignore
 import SFMonoSemiboldWoff from '@/fonts/SFMono/SFMono-Semibold.woff';
+// @ts-ignore
 import SFMonoSemiboldWoff2 from '@/fonts/SFMono/SFMono-Semibold.woff2';
 
+// @ts-ignore
 import SFMonoRegularItalicWoff from '@/fonts/SFMono/SFMono-RegularItalic.woff';
+// @ts-ignore
 import SFMonoRegularItalicWoff2 from '@/fonts/SFMono/SFMono-RegularItalic.woff2';
+// @ts-ignore
 import SFMonoSemiboldItalicWoff from '@/fonts/SFMono/SFMono-SemiboldItalic.woff';
+// @ts-ignore
 import SFMonoSemiboldItalicWoff2 from '@/fonts/SFMono/SFMono-SemiboldItalic.woff2';
 
 const calibreNormalWeights = {
