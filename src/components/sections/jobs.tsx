@@ -2,12 +2,19 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useStaticQuery, graphql } from 'gatsby';
 import { CSSTransition } from 'react-transition-group';
 import styled from 'styled-components';
-import { srConfig } from '@config';
-import { KEY_CODES } from '@utils';
-import sr from '@utils/sr';
-import { usePrefersReducedMotion } from '@hooks';
+import { srConfig } from '@/config';
+import { KEY_CODES } from '@/utils';
+import sr from '@/utils/sr';
+import { usePrefersReducedMotion } from '@/hooks';
 
 const EMPTY_TAB_ID = -1;
+
+interface StyledTabButtonProps {
+  isActive: boolean;
+}
+interface StyledHighlightProps {
+  activeTabId: number;
+}
 
 const StyledJobsSection = styled.section`
   max-width: 700px;
@@ -77,7 +84,7 @@ const StyledTabList = styled.div`
   }
 `;
 
-const StyledTabButton = styled.button`
+const StyledTabButton = styled.button<StyledTabButtonProps>`
   ${({ theme }) => theme.mixins.link};
   display: flex;
   align-items: center;
@@ -110,7 +117,7 @@ const StyledTabButton = styled.button`
   }
 `;
 
-const StyledHighlight = styled.div`
+const StyledHighlight = styled.div<StyledHighlightProps>`
   position: absolute;
   top: 0;
   left: 0;
@@ -304,7 +311,7 @@ const Jobs = () => {
                     ref={el => (tabs.current[i] = el)}
                     id={`tab-${i}`}
                     role="tab"
-                    tabIndex={activeJobsTabId === i ? '0' : '-1'}
+                    tabIndex={activeJobsTabId === i ? 0 : -1}
                     aria-selected={activeJobsTabId === i}
                     aria-controls={`panel-${i}`}>
                     <span>{company}</span>
@@ -335,7 +342,7 @@ const Jobs = () => {
                     ref={el => (tabs.current[i] = el)}
                     id={`tab-${i}`}
                     role="tab"
-                    tabIndex={activeEducationTabId === i ? '0' : '-1'}
+                    tabIndex={activeEducationTabId === i ? 0 : -1}
                     aria-selected={activeEducationTabId === i}
                     aria-controls={`panel-${i}`}>
                     <span>{company}</span>
