@@ -2,10 +2,10 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useStaticQuery, graphql } from 'gatsby';
 import { CSSTransition } from 'react-transition-group';
 import styled from 'styled-components';
-import { srConfig } from '@config';
-import { KEY_CODES } from '@utils';
-import sr from '@utils/sr';
-import { usePrefersReducedMotion } from '@hooks';
+import { srConfig } from '@/config';
+import { KEY_CODES } from '@/utils';
+import sr from '@/utils/sr';
+import { usePrefersReducedMotion } from '@/hooks';
 
 const EMPTY_TAB_ID = -1;
 
@@ -77,7 +77,14 @@ const StyledTabList = styled.div`
   }
 `;
 
-const StyledTabButton = styled.button`
+interface TabButtonProps {
+  isActive: boolean;
+}
+interface HighlightProps {
+  activeTabId: number;
+}
+
+const StyledTabButton = styled.button<TabButtonProps>`
   ${({ theme }) => theme.mixins.link};
   display: flex;
   align-items: center;
@@ -110,7 +117,7 @@ const StyledTabButton = styled.button`
   }
 `;
 
-const StyledHighlight = styled.div`
+const StyledHighlight = styled.div<HighlightProps>`
   position: absolute;
   top: 0;
   left: 0;
@@ -301,10 +308,10 @@ const Jobs = () => {
                     key={i}
                     isActive={activeJobsTabId === i}
                     onClick={() => setTabIndexes(i, EMPTY_TAB_ID)}
-                    ref={el => (tabs.current[i] = el)}
+                    ref={el => { tabs.current[i] = el; }} // return void
                     id={`tab-${i}`}
                     role="tab"
-                    tabIndex={activeJobsTabId === i ? '0' : '-1'}
+                    tabIndex={activeJobsTabId === i ? 0 : -1} // use numbers
                     aria-selected={activeJobsTabId === i}
                     aria-controls={`panel-${i}`}>
                     <span>{company}</span>
@@ -332,10 +339,10 @@ const Jobs = () => {
                     key={i}
                     isActive={activeEducationTabId === i}
                     onClick={() => setTabIndexes(EMPTY_TAB_ID, i)}
-                    ref={el => (tabs.current[i] = el)}
+                    ref={el => { tabs.current[i] = el; }} // return void
                     id={`tab-${i}`}
                     role="tab"
-                    tabIndex={activeEducationTabId === i ? '0' : '-1'}
+                    tabIndex={activeEducationTabId === i ? 0 : -1} // use numbers
                     aria-selected={activeEducationTabId === i}
                     aria-controls={`panel-${i}`}>
                     <span>{company}</span>
@@ -360,7 +367,7 @@ const Jobs = () => {
                     <StyledTabPanel
                       id={`panel-${i}`}
                       role="tabpanel"
-                      tabIndex={activeJobsTabId === i ? '0' : '-1'}
+                      tabIndex={activeJobsTabId === i ? 0: -1}
                       aria-labelledby={`tab-${i}`}
                       aria-hidden={activeJobsTabId !== i}
                       hidden={activeJobsTabId !== i}>
@@ -400,7 +407,7 @@ const Jobs = () => {
                     <StyledTabPanel
                       id={`panel-${i}`}
                       role="tabpanel"
-                      tabIndex={activeEducationTabId === i ? '0' : '-1'}
+                      tabIndex={activeEducationTabId === i ?  0: -1}
                       aria-labelledby={`tab-${i}`}
                       aria-hidden={activeEducationTabId !== i}
                       hidden={activeEducationTabId !== i}>
