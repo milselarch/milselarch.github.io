@@ -4,7 +4,7 @@ import kebabCase from 'lodash/kebabCase';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 import styled from 'styled-components';
-import { Layout } from '@components';
+import { Layout } from '@/components';
 
 const StyledPostContainer = styled.main`
   max-width: 1000px;
@@ -34,7 +34,9 @@ const StyledPostContent = styled.div`
   }
 
   a {
-    ${({ theme }) => theme.mixins.inlineLink};
+    ${({ theme }) => {
+      return `${theme.mixins.inlineLink}`
+    }
   }
 
   code {
@@ -52,6 +54,10 @@ const StyledPostContent = styled.div`
 `;
 
 const PostTemplate = ({ data, location }) => {
+  if (!data?.markdownRemark) {
+    return <div>Post not found.</div>;
+  }
+
   const { frontmatter, html } = data.markdownRemark;
   const { title, date, tags } = frontmatter;
 

@@ -2,10 +2,10 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useStaticQuery, graphql } from 'gatsby';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import styled from 'styled-components';
-import { srConfig } from '@config';
-import sr from '@utils/sr';
-import { Icon } from '@components/icons';
-import { usePrefersReducedMotion } from '@hooks';
+import { srConfig } from '@/config';
+import sr from '@/utils/sr';
+import { Icon } from '@/components/icons';
+import { usePrefersReducedMotion } from '@/hooks';
 
 const StyledProjectsSection = styled.section`
   display: flex;
@@ -38,7 +38,7 @@ const StyledProjectsSection = styled.section`
   }
 
   .more-button {
-    ${({ theme }) => theme.mixins.button};
+    ${({ theme }) => `${theme.mixins.button}`};
     margin: 80px auto 0;
   }
 `;
@@ -63,8 +63,8 @@ const StyledProject = styled.li`
   }
 
   .project-inner {
-    ${({ theme }) => theme.mixins.boxShadow};
-    ${({ theme }) => theme.mixins.flexBetween};
+    ${({ theme }) => `${theme.mixins.boxShadow}`};
+    ${({ theme }) => `${theme.mixins.flexBetween}`};
     flex-direction: column;
     align-items: flex-start;
     position: relative;
@@ -77,7 +77,7 @@ const StyledProject = styled.li`
   }
 
   .project-top {
-    ${({ theme }) => theme.mixins.flexBetween};
+    ${({ theme }) => `${theme.mixins.flexBetween}`};
     margin-bottom: 35px;
 
     .folder {
@@ -141,7 +141,7 @@ const StyledProject = styled.li`
     font-size: 17px;
 
     a {
-      ${({ theme }) => theme.mixins.inlineLink};
+      ${({ theme }) => `${theme.mixins.inlineLink}`};
     }
   }
 
@@ -294,7 +294,7 @@ const Projects = () => {
                   exit={false}>
                   <StyledProject
                     key={i}
-                    ref={el => (revealProjects.current[i] = el)}
+                    ref={el => { revealProjects.current[i] = el; }}
                     style={{
                       transitionDelay: `${i >= GRID_LIMIT ? (i - GRID_LIMIT) * 100 : 0}ms`,
                     }}>

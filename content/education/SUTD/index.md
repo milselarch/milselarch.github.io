@@ -13,5 +13,5 @@ Grade: 4.61 / 5.0 GPA (First Class Honours)
 - Honours List Recipient (AY2024)
 - Global Merit Scholarship Recipient
 - Acquired a Minor in Artificial Intelligence
-- Went for a local exchange (SUSEP) at SMU
-- Went for an overseas summer exchange (GLP) at Standford University
+- Local exchange (SUSEP) at SMU
+- Overseas summer exchange (GLP) at Standford University

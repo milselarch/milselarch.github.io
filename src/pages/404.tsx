@@ -4,9 +4,9 @@ import { Helmet } from 'react-helmet';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { navDelay } from '@utils';
-import { Layout } from '@components';
-import { usePrefersReducedMotion } from '@hooks';
+import { navDelay } from '@/utils';
+import { Layout } from '@/components';
+import { usePrefersReducedMotion } from '@/hooks';
 
 const StyledMainContainer = styled.main`
   ${({ theme }) => theme.mixins.flexCenter};

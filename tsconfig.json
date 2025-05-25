@@ -2,7 +2,11 @@
   "compilerOptions": {
     "esModuleInterop": true,
     // other options...
-    "jsx": "react"
+    "jsx": "react",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@fonts/*": ["src/fonts/*"]
+    }
   },
   "include": ["src/", "src/declarations.d.ts"]
 }

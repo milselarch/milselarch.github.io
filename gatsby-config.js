@@ -29,6 +29,9 @@ module.exports = {
         theme_color: config.colors.navy,
         display: 'minimal-ui',
         icon: 'src/images/personal-logo.svg',
+        alias: {
+          '@': 'src',
+        },
       },
     },
     `gatsby-plugin-offline`,

@@ -9,7 +9,7 @@ const _ = require('lodash');
 
 exports.createPages = async ({ actions, graphql, reporter }) => {
   const { createPage } = actions;
-  const postTemplate = path.resolve(`src/templates/post.js`);
+  const postTemplate = path.resolve(`src/templates/post.jsx`);
   const tagTemplate = path.resolve('src/templates/tag.js');
 
   const result = await graphql(`
@@ -93,6 +93,7 @@ exports.onCreateWebpackConfig = ({ stage, loaders, actions }) => {
   actions.setWebpackConfig({
     resolve: {
       alias: {
+        '@': path.resolve(__dirname, './src/'),
         '@components': path.resolve(__dirname, 'src/components'),
         '@config': path.resolve(__dirname, 'src/config'),
         '@fonts': path.resolve(__dirname, 'src/fonts'),
