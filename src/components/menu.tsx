@@ -2,9 +2,15 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Helmet } from 'react-helmet';
 import { Link } from 'gatsby';
 import styled from 'styled-components';
-import { navLinks } from '@config';
-import { KEY_CODES } from '@utils';
-import { useOnClickOutside } from '@hooks';
+import { navLinks } from '@/config';
+import { KEY_CODES } from '@/utils';
+import { useOnClickOutside } from '@/hooks';
+
+/*
+This component renders a responsive navigation menu
+that includes a hamburger button for mobile devices.
+This is different from the regular navbar that shows on larger screens.
+*/
 
 const StyledMenu = styled.div`
   display: none;
@@ -235,7 +241,7 @@ const Menu = () => {
     };
   }, []);
 
-  const wrapperRef = useRef();
+  const wrapperRef = useRef(null);
   useOnClickOutside(wrapperRef, () => setMenuOpen(false));
 
   return (

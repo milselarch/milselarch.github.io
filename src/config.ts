@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   email: 'milselarch@protonmail.com',
 
   socialMedia: [
