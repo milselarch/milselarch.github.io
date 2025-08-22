@@ -1,4 +1,4 @@
-const config = require('./src/config');
+import config from './src/config';
 
 module.exports = {
   siteMetadata: {
@@ -40,6 +40,23 @@ module.exports = {
       options: {
         name: `images`,
         path: `${__dirname}/src/images`,
+      },
+    },
+    {
+      resolve: `gatsby-plugin-alias-imports`,
+      options: {
+        alias: {
+          src: `${__dirname}/src`,
+        },
+        extensions: [],
+      },
+    },
+    {
+      resolve: `gatsby-plugin-typescript`,
+      options: {
+        isTSX: true, // Enable TSX syntax
+        jsxPragma: `React`, // Set the JSX pragma
+        allExtensions: true, // Allow all file extensions
       },
     },
     {
