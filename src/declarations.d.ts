@@ -2,7 +2,7 @@ import 'styled-components';
 
 import FlattenSimpleInterpolation, {FastOmit, Interpolation} from 'styled-components';
 import {GatsbyLinkProps, Link} from "gatsby";
-import { ButtonHTMLAttributes, DetailedHTMLProps, HTMLAttributes, RefAttributes } from 'react';
+import {ButtonHTMLAttributes, DetailedHTMLProps, HTMLAttributes, LiHTMLAttributes, RefAttributes} from 'react';
 
 
 declare module '*.svg' {

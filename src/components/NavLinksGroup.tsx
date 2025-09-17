@@ -15,7 +15,7 @@ export function NavLinksGroup({
   const fadeDownClass = isHome ? 'fade-down' : '';
 
   return (
-    <div className="flex flex-col gap-2">
+    <ol>
       {config.navLinks && config.navLinks.map((link, i) => (
         <CSSTransition key={i} classNames={fadeDownClass} timeout={timeout}>
           <li key={i} style={{transitionDelay: `${isHome ? i * 100 : 0}ms`}}>
@@ -23,6 +23,6 @@ export function NavLinksGroup({
           </li>
         </CSSTransition>
       ))}
-    </div>
+    </ol>
   )
 }
