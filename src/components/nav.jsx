@@ -8,6 +8,7 @@ import { loaderDelay } from '@utils';
 import { useScrollDirection, usePrefersReducedMotion } from '@hooks';
 import Menu from '@/components/menu';
 import { IconLogo, IconHex } from '@components/icons';
+import {NavLinksGroup} from "./NavLinksGroup";
 
 const StyledHeader = styled.header`
   ${({ theme }) => theme.mixins.flexBetween};
@@ -219,12 +220,11 @@ const Nav = ({ isHome }) => {
 
             <StyledLinks>
               <ol>
-                {navLinks &&
-                  navLinks.map(({ url, name }, i) => (
-                    <li key={i}>
-                      <Link to={url}>{name}</Link>
-                    </li>
-                  ))}
+                {isMounted &&
+                  NavLinksGroup({
+                    isHome,
+                    timeout,
+                  })}
               </ol>
               {/*<div>{ResumeLink}</div>*/}
             </StyledLinks>
@@ -245,14 +245,11 @@ const Nav = ({ isHome }) => {
               <ol>
                 <TransitionGroup component={null}>
                   {isMounted &&
-                    navLinks &&
-                    navLinks.map(({ url, name }, i) => (
-                      <CSSTransition key={i} classNames={fadeDownClass} timeout={timeout}>
-                        <li key={i} style={{ transitionDelay: `${isHome ? i * 100 : 0}ms` }}>
-                          <Link to={url}>{name}</Link>
-                        </li>
-                      </CSSTransition>
-                    ))}
+                    NavLinksGroup({
+                      isHome,
+                      timeout,
+                    })
+                  }
                 </TransitionGroup>
               </ol>
 

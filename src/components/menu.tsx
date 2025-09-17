@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { navLinks } from '@/config';
 import { KEY_CODES } from '@/utils';
 import { useOnClickOutside } from '@/hooks';
+import {NavLinksGroup} from "@/components/NavLinksGroup";
 
 /*
 This component renders a responsive navigation menu
@@ -263,17 +264,12 @@ const Menu = () => {
 
         <StyledSidebar menuOpen={menuOpen} aria-hidden={!menuOpen} tabIndex={menuOpen ? 1 : -1}>
           <nav ref={navRef}>
-            {navLinks && (
-              <ol>
-                {navLinks.map(({ url, name }, i) => (
-                  <li key={i}>
-                    <Link to={url} onClick={() => setMenuOpen(false)}>
-                      {name}
-                    </Link>
-                  </li>
-                ))}
-              </ol>
-            )}
+            <ol>
+              {NavLinksGroup({
+                isHome: false,
+                timeout: 0,
+              })}
+            </ol>
             {/*
             <a href="/resume.pdf" className="resume-link">
               Resume
