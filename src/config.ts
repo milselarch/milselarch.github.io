@@ -45,7 +45,7 @@ const config = {
     {
       name: 'Contact',
       url: '/#contact',
-    },
+    }
   ],
   colors: {
     green: '#64ffda',

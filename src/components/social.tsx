@@ -1,9 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { socialMedia } from '@config';
-import { Side } from '@components';
-import { Icon } from '@components/icons';
+import config from '@/config';
+import { Side } from '@/components';
+import { Icon } from '@/components/icons';
+
+const { socialMedia } = config;
 
 const StyledSocialList = styled.ul`
   display: flex;

@@ -101,6 +101,7 @@ const StyledHamburgerButton = styled.button<
 
 // @ts-ignore
 // @ts-ignore
+// @ts-ignore
 const StyledSidebar = styled.aside<StyledHamburgerButtonProps>`
   display: none;
 
@@ -157,19 +158,31 @@ const StyledSidebar = styled.aside<StyledHamburgerButtonProps>`
     }
 
     a {
-      ${({ theme }: { theme: DefaultTheme }) => theme.mixins.link};
       width: 100%;
       padding: 3px 20px 20px;
     }
   }
 
   .resume-link {
-    ${({theme}: { theme: DefaultTheme }) => theme.mixins.bigButton};
     padding: 18px 50px;
     margin: 10% auto 0;
     width: max-content;
   }
 `;
+
+/*
+    a {
+      // ${({ theme }: { theme: DefaultTheme }) => theme.mixins.link};
+      width: 100%;
+      padding: 3px 20px 20px;
+    }
+    .resume-link {
+      ${({theme}: { theme: DefaultTheme }) => theme.mixins.bigButton};
+      padding: 18px 50px;
+      margin: 10% auto 0;
+      width: max-content;
+    }
+*/
 
 const Menu = () => {
   const [menuOpen, setMenuOpen] = useState(false);
