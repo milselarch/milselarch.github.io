@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Helmet } from 'react-helmet';
-import { Link } from 'gatsby';
-import styled from 'styled-components';
-import { navLinks } from '@/config';
+import styled, {DefaultTheme} from 'styled-components';
 import { KEY_CODES } from '@/utils';
 import { useOnClickOutside } from '@/hooks';
+import {NavLinksGroup} from "@/components/NavLinksGroup";
 
 /*
 This component renders a responsive navigation menu
@@ -20,7 +19,13 @@ const StyledMenu = styled.div`
   }
 `;
 
-const StyledHamburgerButton = styled.button`
+interface StyledHamburgerButtonProps {
+  menuOpen: boolean;
+}
+
+const StyledHamburgerButton = styled.button<
+  StyledHamburgerButtonProps & { theme: DefaultTheme }
+>`
   display: none;
 
   @media (max-width: 768px) {
@@ -94,11 +99,14 @@ const StyledHamburgerButton = styled.button`
   }
 `;
 
-const StyledSidebar = styled.aside`
+// @ts-ignore
+// @ts-ignore
+// @ts-ignore
+const StyledSidebar = styled.aside<StyledHamburgerButtonProps>`
   display: none;
 
   @media (max-width: 768px) {
-    ${({ theme }) => theme.mixins.flexCenter};
+    ${({theme}) => theme.mixins.flexCenter};
     position: fixed;
     top: 0;
     bottom: 0;
@@ -108,7 +116,7 @@ const StyledSidebar = styled.aside`
     height: 100vh;
     outline: 0;
     background-color: var(--foreground-color);
-    box-shadow: -10px 0px 30px -15px var(--dark-shadow);
+    box-shadow: -10px 0 30px -15px var(--dark-shadow);
     z-index: 9;
     transform: translateX(${props => (props.menuOpen ? 0 : 100)}vw);
     visibility: ${props => (props.menuOpen ? 'visible' : 'hidden')};
@@ -116,11 +124,11 @@ const StyledSidebar = styled.aside`
   }
 
   nav {
-    ${({ theme }) => theme.mixins.flexBetween};
+    ${({theme}) => theme.mixins.flexBetween};
     width: 100%;
     flex-direction: column;
     color: var(--lighter-slate);
-    font-family: var(--font-mono);
+    font-family: var(--font-mono), sans-serif;
     text-align: center;
   }
 
@@ -150,19 +158,31 @@ const StyledSidebar = styled.aside`
     }
 
     a {
-      ${({ theme }) => theme.mixins.link};
       width: 100%;
       padding: 3px 20px 20px;
     }
   }
 
   .resume-link {
-    ${({ theme }) => theme.mixins.bigButton};
     padding: 18px 50px;
     margin: 10% auto 0;
     width: max-content;
   }
 `;
+
+/*
+    a {
+      // ${({ theme }: { theme: DefaultTheme }) => theme.mixins.link};
+      width: 100%;
+      padding: 3px 20px 20px;
+    }
+    .resume-link {
+      ${({theme}: { theme: DefaultTheme }) => theme.mixins.bigButton};
+      padding: 18px 50px;
+      margin: 10% auto 0;
+      width: max-content;
+    }
+*/
 
 const Menu = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -263,17 +283,12 @@ const Menu = () => {
 
         <StyledSidebar menuOpen={menuOpen} aria-hidden={!menuOpen} tabIndex={menuOpen ? 1 : -1}>
           <nav ref={navRef}>
-            {navLinks && (
-              <ol>
-                {navLinks.map(({ url, name }, i) => (
-                  <li key={i}>
-                    <Link to={url} onClick={() => setMenuOpen(false)}>
-                      {name}
-                    </Link>
-                  </li>
-                ))}
-              </ol>
-            )}
+            {
+              NavLinksGroup({
+                isHome: false,
+                timeout: 0,
+              })
+            }
             {/*
             <a href="/resume.pdf" className="resume-link">
               Resume

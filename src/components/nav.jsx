@@ -3,11 +3,11 @@ import { Link } from 'gatsby';
 import PropTypes from 'prop-types';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import styled, { css } from 'styled-components';
-import { navLinks } from '@/config';
 import { loaderDelay } from '@utils';
 import { useScrollDirection, usePrefersReducedMotion } from '@hooks';
 import Menu from '@/components/menu';
 import { IconLogo, IconHex } from '@components/icons';
+import {NavLinksGroup} from "./NavLinksGroup";
 
 const StyledHeader = styled.header`
   ${({ theme }) => theme.mixins.flexBetween};
@@ -218,14 +218,11 @@ const Nav = ({ isHome }) => {
             {Logo}
 
             <StyledLinks>
-              <ol>
-                {navLinks &&
-                  navLinks.map(({ url, name }, i) => (
-                    <li key={i}>
-                      <Link to={url}>{name}</Link>
-                    </li>
-                  ))}
-              </ol>
+              {isMounted &&
+                NavLinksGroup({
+                  isHome,
+                  timeout,
+                })}
               {/*<div>{ResumeLink}</div>*/}
             </StyledLinks>
 
@@ -242,19 +239,14 @@ const Nav = ({ isHome }) => {
             </TransitionGroup>
 
             <StyledLinks>
-              <ol>
-                <TransitionGroup component={null}>
-                  {isMounted &&
-                    navLinks &&
-                    navLinks.map(({ url, name }, i) => (
-                      <CSSTransition key={i} classNames={fadeDownClass} timeout={timeout}>
-                        <li key={i} style={{ transitionDelay: `${isHome ? i * 100 : 0}ms` }}>
-                          <Link to={url}>{name}</Link>
-                        </li>
-                      </CSSTransition>
-                    ))}
-                </TransitionGroup>
-              </ol>
+              <TransitionGroup component={null}>
+                {isMounted &&
+                  NavLinksGroup({
+                    isHome,
+                    timeout,
+                  })
+                }
+              </TransitionGroup>
 
               {/*
               <TransitionGroup component={null}>

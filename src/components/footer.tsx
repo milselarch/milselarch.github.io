@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Icon } from '@components/icons';
-import { socialMedia } from '@config';
+import { Icon } from '@/components/icons';
+import config from '@/config';
+
+const { socialMedia } = config;
 
 const StyledFooter = styled.footer`
   ${({ theme }) => theme.mixins.flexCenter};
@@ -42,7 +44,7 @@ const StyledSocialLinks = styled.div`
 
 const StyledCredit = styled.div`
   color: var(--light-slate);
-  font-family: var(--font-mono);
+  font-family: var(--font-mono), sans-serif;
   font-size: var(--fz-xxs);
   line-height: 1;
 
@@ -83,7 +85,7 @@ const Footer = () => {
         </ul>
       </StyledSocialLinks>
 
-      <StyledCredit tabindex="-1">
+      <StyledCredit>
         <a href="https://github.com/bchiang7/v4">
           <div> Template by Brittany Chiang </div>
         </a>

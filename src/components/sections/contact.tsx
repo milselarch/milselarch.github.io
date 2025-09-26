@@ -1,8 +1,11 @@
 import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
-import { srConfig, email } from '@/config';
+import config from '@/config';
+import { srConfig } from '@/config';
 import sr from '@/utils/sr';
 import { usePrefersReducedMotion } from '@/hooks';
+
+const email = config.email;
 
 const StyledContactSection = styled.section`
   max-width: 600px;
@@ -17,7 +20,7 @@ const StyledContactSection = styled.section`
     display: block;
     margin-bottom: 20px;
     color: var(--highlight);
-    font-family: var(--font-mono);
+    font-family: var(--font-mono), sans-serif;
     font-size: var(--fz-md);
     font-weight: 400;
 
@@ -35,9 +38,16 @@ const StyledContactSection = styled.section`
     font-size: clamp(40px, 5vw, 60px);
   }
 
-  .email-link {
-    ${({ theme }) => `${theme.mixins.bigButton}`};
-    margin-top: 50px;
+  div.buttons-box {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+
+    & > a.button-link {
+      ${({ theme }) => `${theme.mixins.bigButton}`};
+      margin-top: 50px;
+    }
   }
 `;
 
@@ -61,12 +71,20 @@ const Contact = () => {
 
       <p>
         Although I’m not currently looking for any new opportunities, my inbox is always open.
-        Whether you have a question or just want to say hi, I’ll try my best to get back to you!
+        Whether you have a question or just want to say hi, do feel free to contact me
+        at <a className="inline-link" href={`mailto:${email}`}>
+          {email}
+        </a>
       </p>
 
-      <a className="email-link" href={`mailto:${email}`}>
-        Say Hello
-      </a>
+      <div className="buttons-box">
+        <a className="button-link" href={`mailto:${email}`}>
+          Say Hello
+        </a>
+        <a className="button-link" href={`#blog`}>
+          View Blog
+        </a>
+      </div>
     </StyledContactSection>
   );
 };
