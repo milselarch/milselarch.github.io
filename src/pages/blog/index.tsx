@@ -4,8 +4,8 @@ import kebabCase from 'lodash/kebabCase';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 import styled from 'styled-components';
-import { Layout } from '@components';
-import { IconBookmark } from '@components/icons';
+import { Layout } from '@/components';
+import { IconBookmark } from '@/components/icons';
 
 const StyledMainContainer = styled.main`
   & > header {
@@ -59,7 +59,6 @@ const StyledPost = styled.li`
   }
 
   .post__inner {
-    ${({ theme }) => theme.mixins.boxShadow};
     ${({ theme }) => theme.mixins.flexBetween};
     flex-direction: column;
     align-items: flex-start;
@@ -116,7 +115,7 @@ const StyledPost = styled.li`
 
   .post__date {
     color: var(--light-slate);
-    font-family: var(--font-mono);
+    font-family: var(--font-mono), sans-serif;
     font-size: var(--fz-xxs);
     text-transform: uppercase;
   }
@@ -131,7 +130,7 @@ const StyledPost = styled.li`
 
     li {
       color: var(--highlight);
-      font-family: var(--font-mono);
+      font-family: var(--font-mono), sans-serif;
       font-size: var(--fz-xxs);
       line-height: 1.75;
 
@@ -142,20 +141,24 @@ const StyledPost = styled.li`
   }
 `;
 
-const PensievePage = ({ location, data }) => {
+/*
+  .post__inner {
+    ${({ theme }) => theme.mixins.boxShadow};
+
+*/
+
+const BlogPage = ({ location, data }) => {
   const posts = data.allMarkdownRemark.edges;
 
   return (
     <Layout location={location}>
-      <Helmet title="Pensieve" />
+      <Helmet title="Blog" />
 
       <StyledMainContainer>
         <header>
-          <h1 className="big-heading">Pensieve</h1>
+          <h1 className="big-heading">Me Blog</h1>
           <p className="subtitle">
-            <a href="https://www.wizardingworld.com/writing-by-jk-rowling/pensieve">
-              a collection of memories
-            </a>
+            May contain content.
           </p>
         </header>
 
@@ -184,7 +187,7 @@ const PensievePage = ({ location, data }) => {
                       <ul className="post__tags">
                         {tags.map((tag, i) => (
                           <li key={i}>
-                            <Link to={`/pensieve/tags/${kebabCase(tag)}/`} className="inline-link">
+                            <Link to={`/blog/tags/${kebabCase(tag)}/`} className="inline-link">
                               #{tag}
                             </Link>
                           </li>
@@ -201,12 +204,12 @@ const PensievePage = ({ location, data }) => {
   );
 };
 
-PensievePage.propTypes = {
+BlogPage.propTypes = {
   location: PropTypes.object.isRequired,
   data: PropTypes.object.isRequired,
 };
 
-export default PensievePage;
+export default BlogPage;
 
 export const pageQuery = graphql`
   {

@@ -81,7 +81,8 @@ const Contact = () => {
         <a className="button-link" href={`mailto:${email}`}>
           Say Hello
         </a>
-        <a className="button-link" href={`#blog`}>
+        {/* TODO: is there a way to dynamically bind the blog href or is that overkill lol */}
+        <a className="button-link" href="/blog">
           View Blog
         </a>
       </div>
