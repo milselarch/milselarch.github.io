@@ -54,6 +54,7 @@ const StyledPostContent = styled.div`
 `;
 
 const PostTemplate = ({ data, location }) => {
+  console.log("LOCATION", location)
   if (!data?.markdownRemark) {
     return <div>Post not found.</div>;
   }

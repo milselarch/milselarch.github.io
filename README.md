@@ -81,3 +81,9 @@ licensed under GPLv3.
 - [x] Change about me content
 - [x] change out job description content
 - [x] Remove twitter and other unnecessary social media references
+
+## Notes:
+
+- blog sites are rendered at `gatsby-node.js`
+- blog articles are located in `content/posts`
+- markdown code snippets styling is in `src/styles/PrismStyles.js`
