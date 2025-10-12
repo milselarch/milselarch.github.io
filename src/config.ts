@@ -20,14 +20,7 @@ const config = {
     {
       name: 'GitHub',
       url: 'https://github.com/milselarch',
-    },
-    /*
-    Fuck linkedin
-    {
-      name: 'Linkedin',
-      url: 'https://www.linkedin.com/in/limthianyew',
-    },
-    */
+    }
   ],
   navLinks: [
     {

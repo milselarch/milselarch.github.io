@@ -6,6 +6,7 @@ import { Helmet } from 'react-helmet';
 import styled from 'styled-components';
 import { Layout } from '@/components';
 import { IconBookmark } from '@/components/icons';
+import {BLOG} from "@/utils/constants";
 
 const StyledMainContainer = styled.main`
   & > header {
@@ -187,7 +188,7 @@ const BlogPage = ({ location, data }) => {
                       <ul className="post__tags">
                         {tags.map((tag, i) => (
                           <li key={i}>
-                            <Link to={`/blog/tags/${kebabCase(tag)}/`} className="inline-link">
+                            <Link to={`/${BLOG}/tags/${kebabCase(tag)}/`} className="inline-link">
                               #{tag}
                             </Link>
                           </li>

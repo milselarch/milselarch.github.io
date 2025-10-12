@@ -3,6 +3,7 @@
     "esModuleInterop": true,
     // other options...
     "jsx": "react",
+    "baseUrl": "./",
     "paths": {
       "@/*": ["src/*"],
       "@fonts/*": ["src/fonts/*"]

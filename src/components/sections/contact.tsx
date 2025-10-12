@@ -4,6 +4,7 @@ import config from '@/config';
 import { srConfig } from '@/config';
 import sr from '@/utils/sr';
 import { usePrefersReducedMotion } from '@/hooks';
+import {BLOG} from "@/utils/constants";
 
 const email = config.email;
 
@@ -82,7 +83,7 @@ const Contact = () => {
           Say Hello
         </a>
         {/* TODO: is there a way to dynamically bind the blog href or is that overkill lol */}
-        <a className="button-link" href="/blog">
+        <a className="button-link" href={"/" + BLOG}>
           View Blog
         </a>
       </div>

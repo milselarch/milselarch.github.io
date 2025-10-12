@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 import styled from 'styled-components';
 import { Layout } from '@/components';
-import {ALL_BLOG_POSTS_MESSAGE} from "@/utils/constants";
+import {ALL_BLOG_POSTS_MESSAGE, BLOG} from "@/utils/constants";
 
 /*
   a {
@@ -58,13 +58,13 @@ const TagTemplate = ({ pageContext, data, location }) => {
       <StyledTagsContainer>
         <span className="breadcrumb">
           <span className="arrow">&larr;</span>
-          <Link to="/blog">{ALL_BLOG_POSTS_MESSAGE}</Link>
+          <Link to={"/" + BLOG}>{ALL_BLOG_POSTS_MESSAGE}</Link>
         </span>
 
         <h1>
           <span>#{tag}</span>
           <span>
-            <Link to="/blog/tags">View all tags</Link>
+            <Link to={`/${BLOG}/tags`}>View all tags</Link>
           </span>
         </h1>
 
@@ -88,7 +88,7 @@ const TagTemplate = ({ pageContext, data, location }) => {
                   {tags &&
                     tags.length > 0 &&
                     tags.map((tag, i) => (
-                      <Link key={i} to={`/blog/tags/${kebabCase(tag)}/`} className="tag">
+                      <Link key={i} to={`/${BLOG}/tags/${kebabCase(tag)}/`} className="tag">
                         #{tag}
                       </Link>
                     ))}

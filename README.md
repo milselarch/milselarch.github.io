@@ -1,7 +1,7 @@
 This project is built on top of [https://github.com/bchiang7/v4](https://github.com/bchiang7/v4)
 by [Brittany Chiang](https://brittanychiang.com/). The original project is
-licensed under the MIT license (retained in this project in `BASE_LICENSE`). Modifications and new code are
-licensed under GPLv3.
+licensed under the MIT license (retained in this project in `BASE_LICENSE`).
+Modifications and new code are licensed under GPLv3.
 
 ## 🛠 Installation & Set Up
 
@@ -58,10 +58,8 @@ licensed under GPLv3.
 
 ## Todo list
 
-- connect own domain to the github pages website
-- only show linkedin link for portfolio.milselarch.com
+- why are all the css colors declared all other the place
 - add github action to do deployment automatically
-- Change codebase to use TypeScript instead of JavaScript
 - Change the color scheme again (black and red tints)
 
 ## Todo stretch goals list
@@ -71,6 +69,8 @@ licensed under GPLv3.
 
 ## Todos done
 
+- [x] connect own domain to the github pages website
+- [x] Change codebase to use TypeScript instead of JavaScript
 - [x] Change the color scheme (red and blank tints)
 - [x] Change logo to my own
 - [x] Remove / change splash screen

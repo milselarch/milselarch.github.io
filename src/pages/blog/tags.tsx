@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 import styled from 'styled-components';
 import { Layout } from '@/components';
-import {ALL_BLOG_POSTS_MESSAGE} from "@/utils/constants";
+import {ALL_BLOG_POSTS_MESSAGE, BLOG} from "@/utils/constants";
 
 const StyledTagsContainer = styled.main`
   max-width: 1000px;
@@ -44,14 +44,14 @@ const TagsPage = ({
     <StyledTagsContainer>
       <span className="breadcrumb">
         <span className="arrow">&larr;</span>
-        <Link to="/blog">{ALL_BLOG_POSTS_MESSAGE}</Link>
+        <Link to={"/" + BLOG}>{ALL_BLOG_POSTS_MESSAGE}</Link>
       </span>
 
       <h1>Tags</h1>
       <ul className="fancy-list">
         {group.map(tag => (
           <li key={tag.fieldValue}>
-            <Link to={`/blog/tags/${kebabCase(tag.fieldValue)}/`} className="inline-link">
+            <Link to={`/${BLOG}/tags/${kebabCase(tag.fieldValue)}/`} className="inline-link">
               {tag.fieldValue} <span className="count">({tag.totalCount})</span>
             </Link>
           </li>
