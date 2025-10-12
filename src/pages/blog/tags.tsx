@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 import styled from 'styled-components';
 import { Layout } from '@/components';
+import {ALL_BLOG_POSTS_MESSAGE} from "@/utils/constants";
 
 const StyledTagsContainer = styled.main`
   max-width: 1000px;
@@ -43,7 +44,7 @@ const TagsPage = ({
     <StyledTagsContainer>
       <span className="breadcrumb">
         <span className="arrow">&larr;</span>
-        <Link to="/blog">All memories</Link>
+        <Link to="/blog">{ALL_BLOG_POSTS_MESSAGE}</Link>
       </span>
 
       <h1>Tags</h1>
