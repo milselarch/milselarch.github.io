@@ -1,19 +1,20 @@
 ---
-title: --C Design Decisions
-description: Design goals for my C compiler
-date: 2025-10-12
+title: --C
+description: Design goals and plans for my C-to-CA compiler
+date: 2025-10-13
 draft: false
-slug: /blog/--c-design-decisions/
+slug: /blog/mmc-design-decisions/
 tags:
   - Compilers
-  - Cellular Automata
-  - C
+  - CellularAutomata
 ---
 
-So my goal here is to create a compiler from a source programming language
+[https://github.com/milselarch/--C](https://github.com/milselarch/--C)
+
+So my goal with this project is to create a compiler from a source programming language
 to a 1D cellular automata. The primary reason for this is that I think it's possible
 to develop tools to analyze the halt-ability of some classes of programs
-when expressed in this form, but also:
+when expressed in this form. But I also have personal reasons to want to do this:
 
 1. to be entirely honestly I've always
    thought that writing a compiler sounds cool and wanted an excuse to
@@ -23,48 +24,21 @@ when expressed in this form, but also:
    compiler as well as a few labs on lexing and parsing,
    we never actually got around to make a full-fledged compiler.
 
-what is cellular automata
-<br/>
-link to repo
-<br/>
-infinite size integer
+   Given how stretched thin I was with job search and final year project woes
+   this was objectively a good thing, but now that I have the free time, this
+   is something I definitely want to get back into.
 
-## CSS
+## On the Choice of Programming Language
 
-```css
-.grid__item {
-  &:hover,
-  &:focus-within {
-    background-color: #eee;
-  }
+So the source programming language could _theoretically_ be anything, but
+there a couple of requirements I have in mind in practice:
 
-  a {
-    position: relative;
-    z-index: 1;
-  }
-
-  h2 {
-    a {
-      position: static;
-
-      &:hover,
-      &:focus {
-        color: blue;
-      }
-
-      &:before {
-        content: '';
-        display: block;
-        position: absolute;
-        z-index: 0;
-        width: 100%;
-        height: 100%;
-        top: 0;
-        left: 0;
-        transition: background-color 0.1s ease-out;
-        background-color: transparent;
-      }
-    }
-  }
-}
-```
+1. Its gotta be a small programming language  
+   Writing a compiler for a language like lua or C is a lot of work, but
+   is still possible for a one-man show. C++ / Rust on the other hand is
+   basically impossible to solo.
+2. Its gotta be performant  
+   The performance overhead of executing a program after compiling it
+   into a cellular automata is going to be massive no matter what -
+   but a language that is designed to be compiled down to hardware
+   instructions + has static as opposed to dynamic typing would ideally have less of it.

@@ -6,7 +6,7 @@
 
 const path = require('path');
 const _ = require('lodash');
-const { BLOG } = require('./src/utils/constants');
+const { BLOG } = require('./src/utils/constants.ts');
 
 exports.createPages = async ({ actions, graphql, reporter }) => {
   const { createPage } = actions;
