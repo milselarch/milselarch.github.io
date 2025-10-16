@@ -1,4 +1,4 @@
-export const srConfig = (delay = 200, viewFactor = 0.25) => ({
+const srConfig = (delay = 200, viewFactor = 0.25) => ({
   origin: 'bottom',
   distance: '20px',
   duration: 500,
@@ -12,7 +12,7 @@ export const srConfig = (delay = 200, viewFactor = 0.25) => ({
   useDelay: 'always',
   viewFactor,
   viewOffset: { top: 0, right: 0, bottom: 0, left: 0 },
-})
+});
 
 const config = {
   email: 'milselarch@protonmail.com',
@@ -20,7 +20,7 @@ const config = {
     {
       name: 'GitHub',
       url: 'https://github.com/milselarch',
-    }
+    },
   ],
   navLinks: [
     {
@@ -38,14 +38,14 @@ const config = {
     {
       name: 'Contact',
       url: '/#contact',
-    }
+    },
   ],
   colors: {
     green: '#64ffda',
     navy: '#0a192f',
     darkNavy: '#020c1b',
   },
-  srConfig: srConfig
+  srConfig: srConfig,
 };
 
-export default config;
+module.exports = config;

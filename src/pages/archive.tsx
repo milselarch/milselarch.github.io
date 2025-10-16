@@ -3,7 +3,7 @@ import { graphql } from 'gatsby';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 import styled from 'styled-components';
-import { srConfig } from '@/config';
+import { srConfig } from '@/config.js';
 import sr from '@/utils/sr';
 import { Layout } from '@/components';
 import { Icon } from '@/components/icons';

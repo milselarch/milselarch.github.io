@@ -1,5 +1,5 @@
 import { CSSTransition } from 'react-transition-group';
-import config from '@/config';
+import config from '@/config.js';
 import React from 'react';
 import {Link} from "gatsby";
 

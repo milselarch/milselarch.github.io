@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
-import config from '@/config';
-import { srConfig } from '@/config';
+import config from '@/config.js';
+import { srConfig } from '@/config.js';
 import sr from '@/utils/sr';
 import { usePrefersReducedMotion } from '@/hooks';
 import {BLOG} from "@/utils/constants";

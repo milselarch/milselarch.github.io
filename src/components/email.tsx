@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import config from '@/config';
+import config from '@/config.js';
 import { Side } from '@/components';
 
 const { email } = config;
