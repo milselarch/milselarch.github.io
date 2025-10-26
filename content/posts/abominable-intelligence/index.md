@@ -9,63 +9,28 @@ tags:
   - Politics
 ---
 
-So my goal here is to create a compiler from a source programming language
-to a 1D cellular automata. The primary reason for this is that I think it's possible
-to develop tools to analyze the halt-ability of some classes of programs
-when expressed in this form, but also:
+_What is AI?_  
+AI is the fitting of a mathematical equation to a bunch of numerical data points,
+so that you can create an statistical representation of said data points.
 
-1. to be entirely honestly I've always
-   thought that writing a compiler sounds cool and wanted an excuse to
-   get into an endeavor as massive as this one
-2. I did take a compilers course back in uni, but it always felt incomplete
-   in the sense that although we had lessons on the different stages of a
-   compiler as well as a few labs on lexing and parsing,
-   we never actually got around to make a full-fledged compiler.
+_What is the purpose of all this?_  
+Well the idea is that If we get a new data point we can plug it into the equation
+and use the interpolated value as a prediction. An example:
 
-## what is cellular automata?
+- If we had a dataset with numbers representing the cloudiness of the sky
+  and the amount of rainfall each day for every day in the past year, we could try to
+  fit an equation to that data and then interpolate the amount of rainfall that
+  could be expected for today given the number(s) representing how cloudy today is.  
+  [TODO: linear regression diagram]
 
-asdasd
-<br/>
-link to repo
-<br/>
-infinite size integer
+So far so good, predicting stuff sounds innocuous enough -
 
-## CSS
+_So what causes AI to become abominable?_
 
-```css
-.grid__item {
-  &:hover,
-  &:focus-within {
-    background-color: #eee;
-  }
+[Technology is the application of scientific knowledge to the practical aims of human life]
+(https://www.britannica.com/technology/technology)
 
-  a {
-    position: relative;
-    z-index: 1;
-  }
-
-  h2 {
-    a {
-      position: static;
-
-      &:hover,
-      &:focus {
-        color: blue;
-      }
-
-      &:before {
-        content: '';
-        display: block;
-        position: absolute;
-        z-index: 0;
-        width: 100%;
-        height: 100%;
-        top: 0;
-        left: 0;
-        transition: background-color 0.1s ease-out;
-        background-color: transparent;
-      }
-    }
-  }
-}
-```
+When we run an AI model to predict the weather or figure out whether a picture
+is that of a cat or a dog, that's work that no one really cares about.
+It’s grunt work - the less of it we have to do to get the outcome we want the
+happier we’d be.

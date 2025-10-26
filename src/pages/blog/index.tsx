@@ -6,7 +6,7 @@ import { Helmet } from 'react-helmet';
 import styled from 'styled-components';
 import { Layout } from '@/components';
 import { IconBookmark } from '@/components/icons';
-import {ALLOW_EDGY_BLOG_POSTS, BLOG} from "@/utils/constants";
+import {GET_ALLOW_EDGY_BLOG_POSTS, BLOG} from "@/utils/constants";
 
 
 const StyledMainContainer = styled.main`
@@ -179,6 +179,7 @@ const BlogPage = ({
   location: Location
 }) => {
   const posts = data.allMarkdownRemark.edges;
+  const ALLOW_EDGY_BLOG_POSTS = GET_ALLOW_EDGY_BLOG_POSTS();
 
   return (
     <Layout location={location}>
