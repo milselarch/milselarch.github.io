@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useStaticQuery, graphql } from 'gatsby';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import styled from 'styled-components';
-import { srConfig } from '@/config';
+import { srConfig } from '@/config.js';
 import sr from '@/utils/sr';
 import { Icon } from '@/components/icons';
 import { usePrefersReducedMotion } from '@/hooks';

@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 import styled from 'styled-components';
 import { Layout } from '@/components';
+import {ALL_BLOG_POSTS_MESSAGE} from "../utils/constants";
 
 const StyledPostContainer = styled.main`
   max-width: 1000px;
@@ -54,6 +55,7 @@ const StyledPostContent = styled.div`
 `;
 
 const PostTemplate = ({ data, location }) => {
+  console.log("LOCATION", location)
   if (!data?.markdownRemark) {
     return <div>Post not found.</div>;
   }
@@ -68,7 +70,7 @@ const PostTemplate = ({ data, location }) => {
       <StyledPostContainer>
         <span className="breadcrumb">
           <span className="arrow">&larr;</span>
-          <Link to="/pensieve">All memories</Link>
+          <Link to="/blog">{ALL_BLOG_POSTS_MESSAGE}</Link>
         </span>
 
         <StyledPostHeader>
@@ -85,7 +87,7 @@ const PostTemplate = ({ data, location }) => {
             {tags &&
               tags.length > 0 &&
               tags.map((tag, i) => (
-                <Link key={i} to={`/pensieve/tags/${kebabCase(tag)}/`} className="tag">
+                <Link key={i} to={`/blog/tags/${kebabCase(tag)}/`} className="tag">
                   #{tag}
                 </Link>
               ))}

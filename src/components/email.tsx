@@ -1,8 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { email } from '@config';
-import { Side } from '@components';
+import config from '@/config.js';
+import { Side } from '@/components';
+
+const { email } = config;
 
 const StyledLinkWrapper = styled.div`
   display: flex;
@@ -22,7 +24,7 @@ const StyledLinkWrapper = styled.div`
   a {
     margin: 20px auto;
     padding: 10px;
-    font-family: var(--font-mono);
+    font-family: var(--font-mono), sans-serif;
     font-size: var(--fz-xxs);
     line-height: var(--fz-lg);
     letter-spacing: 0.1em;

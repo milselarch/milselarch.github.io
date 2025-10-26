@@ -1,9 +1,10 @@
 import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
-import config from '@/config';
-import { srConfig } from '@/config';
+import config from '@/config.js';
+import { srConfig } from '@/config.js';
 import sr from '@/utils/sr';
 import { usePrefersReducedMotion } from '@/hooks';
+import {BLOG} from "@/utils/constants";
 
 const email = config.email;
 
@@ -81,7 +82,8 @@ const Contact = () => {
         <a className="button-link" href={`mailto:${email}`}>
           Say Hello
         </a>
-        <a className="button-link" href={`#blog`}>
+        {/* TODO: is there a way to dynamically bind the blog href or is that overkill lol */}
+        <a className="button-link" href={"/" + BLOG}>
           View Blog
         </a>
       </div>

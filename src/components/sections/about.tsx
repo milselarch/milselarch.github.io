@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { StaticImage } from 'gatsby-plugin-image';
 import styled from 'styled-components';
-import config from '@/config';
+import config from '@/config.js';
 import sr from '@/utils/sr';
 import { usePrefersReducedMotion } from '@/hooks';
 

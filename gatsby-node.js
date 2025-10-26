@@ -6,11 +6,12 @@
 
 const path = require('path');
 const _ = require('lodash');
+const { BLOG } = require('./src/utils/constants.ts');
 
 exports.createPages = async ({ actions, graphql, reporter }) => {
   const { createPage } = actions;
   const postTemplate = path.resolve(`src/templates/post.jsx`);
-  const tagTemplate = path.resolve('src/templates/tag.js');
+  const tagTemplate = path.resolve('src/templates/tag.tsx');
 
   const result = await graphql(`
     {
@@ -57,7 +58,7 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
   // Make tag pages
   tags.forEach(tag => {
     createPage({
-      path: `/pensieve/tags/${_.kebabCase(tag.fieldValue)}/`,
+      path: `/${BLOG}/tags/${_.kebabCase(tag.fieldValue)}/`,
       component: tagTemplate,
       context: {
         tag: tag.fieldValue,
