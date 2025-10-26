@@ -6,7 +6,8 @@ import { Helmet } from 'react-helmet';
 import styled from 'styled-components';
 import { Layout } from '@/components';
 import { IconBookmark } from '@/components/icons';
-import {BLOG} from "@/utils/constants";
+import {ALLOW_EDGY_BLOG_POSTS, BLOG} from "@/utils/constants";
+
 
 const StyledMainContainer = styled.main`
   & > header {
@@ -148,7 +149,35 @@ const StyledPost = styled.li`
 
 */
 
-const BlogPage = ({ location, data }) => {
+interface Frontmatter {
+  title: string;
+  description: string;
+  date: string;
+  draft: boolean;
+  slug: string;
+  tags: string[];
+  edgy?: boolean;
+}
+
+interface BlogPostNode {
+  frontmatter: Frontmatter;
+  html: string;
+}
+
+interface BlogPageData {
+  allMarkdownRemark: {
+    edges: {
+      node: BlogPostNode;
+    }[];
+  };
+}
+
+const BlogPage = ({
+  location, data 
+}: {
+  data: BlogPageData,
+  location: Location
+}) => {
   const posts = data.allMarkdownRemark.edges;
 
   return (
@@ -167,7 +196,9 @@ const BlogPage = ({ location, data }) => {
           {posts.length > 0 &&
             posts.map(({ node }, i) => {
               const { frontmatter } = node;
-              const { title, description, slug, date, tags } = frontmatter;
+              const { title, description, slug, date, tags, edgy } = frontmatter;
+              if ((edgy === true) && !ALLOW_EDGY_BLOG_POSTS) { return }
+              
               const formattedDate = new Date(date).toLocaleDateString();
 
               return (
@@ -230,6 +261,7 @@ export const pageQuery = graphql`
             date
             tags
             draft
+            edgy
           }
           html
         }

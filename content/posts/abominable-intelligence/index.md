@@ -3,6 +3,7 @@ title: Abominable Intelligence
 description: Generative AI is antithetical to life itself
 date: 2025-10-12
 draft: false
+edgy: true
 slug: /blog/--c-design-decisions/
 tags:
   - Politics
