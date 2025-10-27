@@ -189,7 +189,7 @@ const BlogPage = ({
   data: BlogPageData,
   location: Location
 }) => {
-  const posts = data.allMarkdownRemark.edges;
+  const posts = data.allMarkdownRemark.edges || [];
   const ALLOW_EDGY_BLOG_POSTS = GET_ALLOW_EDGY_BLOG_POSTS();
 
   return (
