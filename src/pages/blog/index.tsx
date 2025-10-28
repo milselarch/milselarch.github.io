@@ -32,14 +32,25 @@ const StyledMainContainer = styled.main`
 `;
 const StyledGrid = styled.ul`
   ${({ theme }) => theme.mixins.resetList};
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  grid-gap: 15px;
-  margin-top: 50px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.2rem;
+  margin-top: 0;
   position: relative;
+  justify-content: center;
+
+  & > li {
+    flex: 0 1 300px;
+    max-width: 1fr;
+    width: 100%;
+  }
 
   @media (max-width: 1080px) {
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    & > li {
+      // set a fixed basis to avoid wrapping issues
+      flex-basis: 25rem;
+      min-width: 25rem;
+    }
   }
 `;
 const StyledPost = styled.li`
@@ -127,18 +138,18 @@ const StyledPost = styled.li`
     align-items: flex-end;
     flex-wrap: wrap;
     padding: 0;
-    margin: 0;
     list-style: none;
+    justify-content: end;
+    flex-direction: row;
+    margin-left: 0.5rem;
+    gap: 0.5rem;
+    row-gap: 0;
 
     li {
       color: var(--highlight);
       font-family: var(--font-mono), sans-serif;
       font-size: var(--fz-xxs);
       line-height: 1.75;
-
-      &:not(:last-of-type) {
-        margin-right: 15px;
-      }
     }
   }
 `;
@@ -149,7 +160,7 @@ const StyledPost = styled.li`
 
 */
 
-interface Frontmatter {
+interface FrontMatter {
   title: string;
   description: string;
   date: string;
@@ -160,7 +171,7 @@ interface Frontmatter {
 }
 
 interface BlogPostNode {
-  frontmatter: Frontmatter;
+  frontmatter: FrontMatter;
   html: string;
 }
 
@@ -178,7 +189,7 @@ const BlogPage = ({
   data: BlogPageData,
   location: Location
 }) => {
-  const posts = data.allMarkdownRemark.edges;
+  const posts = data.allMarkdownRemark.edges || [];
   const ALLOW_EDGY_BLOG_POSTS = GET_ALLOW_EDGY_BLOG_POSTS();
 
   return (
