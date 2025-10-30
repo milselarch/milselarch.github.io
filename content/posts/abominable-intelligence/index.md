@@ -1,6 +1,6 @@
 ---
 title: Abominable Intelligence
-description: Generative AI is antithetical to life itself
+description: A large subset of Generative AI use right now is antithetical to life itself.
 date: 2025-10-12
 draft: false
 edgy: true
@@ -9,7 +9,7 @@ tags:
   - Politics
 ---
 
-_What is AI?_
+_What is AI?_  
 AI is the fitting of a mathematical equation to a bunch of numerical data points,
 so that you can create an statistical representation of said data points.
 
@@ -55,9 +55,27 @@ With generative AI models, we have a system that does math to make a
 statistical aggregation of the input text / images / audio, and spits out random
 samples of this statistical aggregation soup to create your generative AI image
 or whatever. We know it's all just math, so any creativity has to come from the input.
-Or more precisely, generative AI is literally just remixing the input data in a way
-that looks good.
+Or more precisely, generative AI is literally just producing a statistical
+recombination of the input data.
 
-We know none of these fucking AI companies give two shits about sourcing their data
+We know none of these fucking AI companies give two shits about
+[sourcing their data](https://youtu.be/mAUpxN-EIgU?si=h4BpyyaPcJLUUTwq&t=264)
 from sources that are okay with being trained on and / or compensate the sources
-fairly, it has become a plagiarism machine for generative AI companies.
+fairly, so in practice, this together with the previous point makes it clear
+that the whole thing has become a plagiarism machine for generative
+AI companies.
+
+The irony about all this is that your faceless multinational corporations
+have been the ones pushing for copyright / IP laws / anti-right-to-repair
+legislation this entire time under the pretext of promoting innovation
+(something I'm against from a purely rights-based argument, but I'm gonna
+save that for a different blog post where I solve the trolley problem lol),
+but now the argument for AI specifically is that they should be allowed to
+consume and regurgitate everything and anything on the internet in order to
+"promote AI innovation" and "not stifle the industry".
+
+> Training AI models using publicly available internet materials is fair use,
+> as supported by long-standing and widely accepted precedents.
+> We view this principle as fair to creators, necessary for innovators,
+> and critical for US competitiveness.
+> \- [https://openai.com/index/openai-and-journalism/](https://openai.com/index/openai-and-journalism/)
