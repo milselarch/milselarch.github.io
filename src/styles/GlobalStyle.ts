@@ -41,7 +41,7 @@ const GlobalStyle = createGlobalStyle`
   */
   :focus:not(:focus-visible) {
     outline: none;
-    outline-offset: 0px;
+    outline-offset: 0;
   }
 
   /*
