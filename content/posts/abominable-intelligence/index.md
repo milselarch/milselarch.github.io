@@ -1,6 +1,6 @@
 ---
 title: Abominable Intelligence
-description: A large subset of Generative AI use right now is antithetical to life itself.
+description: i.e. most of the generative AI space right now
 date: 2025-10-12
 draft: false
 edgy: true
