@@ -1,8 +1,8 @@
 ---
 date: '2022-01-24'
 title: 'Raiders of Hanoi'
-github: 'https://github.com/50033-game-design-and-development/50033-final-project-git-gud-games'
-external: 'https://alian713.itch.io/murder-mansion'
+github: 'https://github.com/hithfaernith/compstruct1d'
+external: ''
 tech:
   - FPGA
   - Lucid
