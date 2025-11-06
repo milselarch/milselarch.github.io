@@ -56,11 +56,19 @@ Modifications and new code are licensed under GPLv3.
 | White          | ![#e6f1ff](https://via.placeholder.com/10/e6f1ff?text=+) `#e6f1ff` |
 | Green          | ![#64ffda](https://via.placeholder.com/10/64ffda?text=+) `#64ffda` |
 
+## Bugs
+
+- running `npm build` while the running it locally in dev can
+  lead to a build failure where node complains about index.js not being found
+- image links rendered from markdown have an underline when hovered over
+
 ## Todo list
 
 - why are all the css colors declared all other the place
-- add github action to do deployment automatically
 - Change the color scheme again (black and red tints)
+- make links have a subtle underline when not hovered on
+- rounded image corners (on the fence about this)?
+- have the navbar load blog-specific navigation options when on blog pages
 
 ## Todo stretch goals list
 
@@ -69,6 +77,7 @@ Modifications and new code are licensed under GPLv3.
 
 ## Todos done
 
+- [x] add github action to do deployment automatically
 - [x] connect own domain to the github pages website
 - [x] Change codebase to use TypeScript instead of JavaScript
 - [x] Change the color scheme (red and blank tints)

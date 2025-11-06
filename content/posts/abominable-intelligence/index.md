@@ -69,7 +69,7 @@ The irony about all this is that your faceless multinational corporations
 have been the ones pushing for copyright / IP laws / anti-right-to-repair
 legislation this entire time under the pretext of promoting innovation
 (something I'm against from a purely rights-based argument, but I'm gonna
-save that for a different blog post where I solve the trolley problem lol),
+save that for a different blog post),
 but now the argument for AI specifically is that they should be allowed to
 consume and regurgitate everything and anything on the internet in order to
 "promote AI innovation" and "not stifle the industry".
