@@ -1,5 +1,10 @@
 import { css } from 'styled-components';
 
+/*
+This is the place where all the styles for markdown posts 
+are defined it seems like.
+*/
+
 const prismColors = {
   // TODO: toggle for red / dark / light mode
   bg: `#111`,
@@ -18,9 +23,12 @@ const prismColors = {
 
 const PrismStyles = css`
   /**
-    * Add back the container background-color, border-radius, padding, margin
-    * and overflow that we removed from <pre>.
-    */
+  * Add back the container background-color, border-radius, padding, margin
+  * and overflow that we removed from <pre>.
+  */
+  * {
+    word-break: break-word;
+  }
 
   .gatsby-highlight {
     background-color: ${prismColors.bg};
@@ -30,7 +38,7 @@ const PrismStyles = css`
     padding: 1.25em;
     overflow: auto;
     position: relative;
-    font-family: var(--font-mono);
+    font-family: var(--font-mono), sans-serif;
     font-size: var(--fz-md);
   }
 
@@ -48,13 +56,13 @@ const PrismStyles = css`
   }
 
   /**
-    * Remove the default PrismJS theme background-color, border-radius, margin,
-    * padding and overflow.
-    * 1. Make the element just wide enough to fit its content.
-    * 2. Always fill the visible space in .gatsby-highlight.
-    * 3. Adjust the position of the line numbers
-    */
-
+  * Remove the default PrismJS theme background-color, border-radius, margin,
+  * padding and overflow.
+  * 1. Make the element just wide enough to fit its content.
+  * 2. Always fill the visible space in .gatsby-highlight.
+  * 3. Adjust the position of the line numbers
+  */
+  // code snippets
   .gatsby-highlight pre[class*='language-'] {
     background-color: transparent;
     margin: 0;
@@ -62,14 +70,12 @@ const PrismStyles = css`
     overflow: initial;
     float: left; /* 1 */
     min-width: 100%; /* 2 */
-    padding-top: 2em;
   }
 
   /* File names */
-
   .gatsby-code-title {
     padding: 1em 1.5em;
-    font-family: var(--font-mono);
+    font-family: var(--font-mono), sans-serif;
     font-size: var(--fz-xs);
     background-color: ${prismColors.bg};
     color: ${prismColors.grey};
