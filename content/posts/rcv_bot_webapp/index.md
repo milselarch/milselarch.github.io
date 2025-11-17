@@ -3,7 +3,7 @@ title: Adding a webapp inside Telegram
 description: An overview for how I added an integrated
   webapp to my ranked choice voting telegram bot
 date: 2025-11-06
-draft: false
+draft: true
 slug: /blog/adding-webapp-to-rcv-bot/
 tags:
   - Telegram
