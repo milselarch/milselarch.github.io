@@ -3,7 +3,7 @@ title: Adding a webapp inside Telegram
 description: An overview for how I added an integrated
   webapp to my ranked choice voting telegram bot
 date: 2025-11-06
-draft: true
+draft: false
 slug: /blog/adding-webapp-to-rcv-bot/
 tags:
   - Telegram
@@ -51,6 +51,54 @@ def build_private_vote_markup(
 
     return markup_layout
 ```
+
+[`🔗 base_api.py : 525`](https://github.com/milselarch/RCV-tele-bot/blob/6c17375577a3c28d9893a69a2cc3c2a72b1bf88d/base_api.py#L525)
+
+Because this is just going to be a link to another webpage,
+the only way to pass information to the web frontend about the user and the poll
+would be via the link itself i.e. `GET` params that are
+inserted into the link, hence why I pass in params like the poll id and
+tele_user (to insert the user ID to query params) into `generate_poll_url`:
+
+```python:title=base_api.py
+@classmethod
+def generate_poll_url(
+    cls, poll_id: int, tele_user: TeleUser,
+    ref_message_id: int = BLANK_ID, ref_chat_id: int = BLANK_ID
+) -> str:
+    ...
+    req = PreparedRequest()
+    auth_date = str(int(time.time()))
+    query_id = cls.generate_secret()
+    user_info = json.dumps({
+        'id': tele_user.id,
+        'username': tele_user.username
+    })
+
+    data_check_string = cls.make_data_check_string(
+        auth_date=auth_date, query_id=query_id, user=user_info
+    )
+    validation_hash = cls.sign_data_check_string(data_check_string)
+    ref_info = f'{auth_date}:{poll_id}:{ref_message_id}:{ref_chat_id}'
+    ref_hash = cls.sign_data_check_string(ref_info)
+
+    params = {
+        'poll_id': str(poll_id),
+        'auth_date': auth_date,
+        'query_id': query_id,
+        'user': user_info,
+        'hash': validation_hash,
+
+        'ref_info': ref_info,
+        'ref_hash': ref_hash
+    }
+    req.prepare_url(WEBHOOK_URL, params)
+    return req.url
+```
+
+[`🔗 base_api.py : 492`](https://github.com/milselarch/RCV-tele-bot/blob/6c17375577a3c28d9893a69a2cc3c2a72b1bf88d/base_api.py#492)
+
+So theres quite a few things being encoded here but essentially
 
 ## The web frontend
 
