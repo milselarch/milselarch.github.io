@@ -98,7 +98,25 @@ def generate_poll_url(
 
 [`🔗 base_api.py : 492`](https://github.com/milselarch/RCV-tele-bot/blob/6c17375577a3c28d9893a69a2cc3c2a72b1bf88d/base_api.py#492)
 
-So theres quite a few things being encoded here but essentially
+So there's quite a few things being encoded here, but essentially
+we have two JWT payloads, one for authenticating the user to our web backend
+before it returns poll info to the webapp frontend (`data_check_string`),
+and one that gets passed to the bot backend after the user presses submit
+on the webapp (TODO: confirm if its just info or for verification also):
+
+1. `poll_id` - the ID of the poll being voted for
+2. `auth_date` - a timestamp for when the link is being generated  
+   Originally I was going to have links auto-expire after a certain amount of
+   time, but I decided against because of user experience reasons -
+   I felt it might be off-putting to have the user open the link to the webapp
+   only for the webapp to tell them their link has expired, so this field isn't
+   actively checked against.
+   - This isn't to say that the timestamp field is completely useless though -  
+     it's inclusion as
+   - One idea / future todo I had that acts as a compromise of sorts is to
+     store the latest timestamp in every chat that a link was generated for, and
+     invalidated all links with a timestamp that are older than that.
+3.
 
 ## The web frontend
 
