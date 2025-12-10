@@ -87,7 +87,7 @@ const Footer = () => {
 
       <StyledCredit>
         <a href="https://github.com/bchiang7/v4">
-          <div> Template by Brittany Chiang </div>
+          <div> Built upon a template by Brittany Chiang </div>
         </a>
       </StyledCredit>
     </StyledFooter>
