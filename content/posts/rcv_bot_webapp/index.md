@@ -86,9 +86,23 @@ def generate_poll_url(
 
 [`🔗 base_api.py : 492`](https://github.com/milselarch/RCV-tele-bot/blob/6c17375577a3c28d9893a69a2cc3c2a72b1bf88d/base_api.py#492)
 
-So there's quite a few things being encoded here, but essentially
-we have two JWT payloads, one for fetching poll info from a web backend server,
-and one for submitting votes back to the bot backend server:
+The main thing that is being done here is the creation of a string payload `ref_info`
+encoding the intended poll ID that the user wants to vote for, as well as
+a couple of other fields, as well as a signature `ref_hash` created from
+a HMAC hash of `ref_info` and the telegram bot's secret key; both
+which will be passed back to the telegram bot along with the
+`poll_id` as well as the user's ranked-choice vote when they
+press the submit button in the telegram webapp.
+
+Upon receiving all the stated fields, the telegram bot server will:
+
+1. Do an authorization check -  
+   The bot server will recompute the signature of `ref_info` and check it
+   against `ref_hash` and check that they are the same before allowing
+   any voting relation actions to be performed
+   - This ensures that the contents of `ref_info` that are received by the
+     telegram bot server could only have originated from telegram bot server itself,
+     since
 
 1. one JWT payload - the signature `data_check_string`
    and the input key-value paris
