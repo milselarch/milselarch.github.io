@@ -109,13 +109,16 @@ Anyway, as far as the user flow is concerned:
 2. upon which the bot will respond with a message about the info
    about said poll. The code that generates said message will also
    attach a button prompting the user to vote in a DM chat with the bot
+   (This is the _vote via direct chat_ button)
+   ![DM chat webapp button screenshot](./dm_redirect.jpg)
 3. clicking the button redirects the user to a DM chat with the bot,
    as well as automatically send the `/start` command in said DM chat
    (along with some hidden context info saying that `/start`
    command came from aforementioned button
    prompting the user to vote in a DM chat with the bot).
 4. The following handler responds to the `/start` command
-   with the poll info and a button that will open the webapp:
+   with a message containing the poll info,
+   as well insert a button into the DM chat that will open the webapp:
 
 ```python:title=start_handlers.py
 async def handle_messages(
@@ -145,6 +148,10 @@ async def handle_messages(
         poll_message.text, reply_markup=reply_markup
     )
 ```
+
+This is what the whole thing looks like:
+
+![DM chat webapp button screenshot](./rm_webapp_button.png)
 
 TODO: add screenshot for what this ^ looks like
 
