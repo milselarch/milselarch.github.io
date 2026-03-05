@@ -164,13 +164,35 @@ generated earlier:
 
 It would be a little dishonest to claim that the idea of using
 the `ref_info` payload and signing it using the bot's secret key is a wholly
-original idea - as in fact I actually copied the idea from the
+original idea - as in fact I actually copied the idea from the authentication
 headers + signature that telegram itself inserts into the embedded
-browser's global variables when you open the webapp
-via an _inline_ keyboard button.
+browser's global variables at `window.Telegram.WebApp.initData` when you open
+the webapp via an inline keyboard button.
 
-Note that I qualified "keyboard button" with the word _inline_
-\- there's a reason for that:
+- Note that I wrote _inline keyboard button_, not _keyboard button_ like we've
+  been using thus far in all the code snippets so far in the telegram bot.
+
+  As it turns out telegram will _not_ generate authentication
+  headers and put them into `window.Telegram.WebApp.initData` for you in
+  your webapp when you use `InlineKeyboardButton` instead of `KeyboardButton`,
+  but the flip side to that is that `InlineKeyboardButton` allows the webapp
+  to send messages to chat after webapp submission while `KeyboardButton` doesn't.
+  [TODO link on differences]
+
+  I don't really understand why I have to choose between user authentication
+  on the webapp and being able to send messages from it, so what I've done is [TODO]
+
+  I'm assuming telegram added these restrictions for security reasons,
+  nudging webapps such that anything that needs authentication will
+  only have read-only access, and anything that does affect state /
+  the database shouldn't be important enough to need authentication.
+
+  If that is the intention, then it comes across as quite unnecessary
+  in my opinion, since a `KeyboardButton`-initiated webapp frontend could
+  also modify state using requests to a backend web server anyway,
+  why not allow it to forward info to the
+  bot server using the submit button on the webapp to send
+  a message in the DM chat as well?
 
 You might be wondering why not just send all the poll info in url
 generation process rather than just the poll_id + a call to the backend later?
