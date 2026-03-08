@@ -177,25 +177,34 @@ the webapp via an inline keyboard button.
   your webapp when you use `InlineKeyboardButton` instead of `KeyboardButton`,
   but the flip side to that is that `InlineKeyboardButton` allows the webapp
   to send messages to chat after webapp submission while `KeyboardButton` doesn't.
-  [TODO link on differences]
 
-  I don't really understand why I have to choose between user authentication
-  on the webapp and being able to send messages from it, so what I've done is [TODO]
+  I don't really understand why / refuse to accept I have to choose between
+  being able to receive user information from the chat into the webapp
+  and being able to send messages from the webapp, hence my solution of
+  sending out _keyboard buttons_ with the link to the webapp, but with user
+  info inserted into link's GET params manually to mimic what
+  Telegram itself does with _inline keyboard buttons_ in the link
+  generation process.
 
-  I'm assuming telegram added these restrictions for security reasons,
-  nudging webapps such that anything that needs authentication will
-  only have read-only access, and anything that does affect state /
-  the database shouldn't be important enough to need authentication.
+  - I'm assuming telegram added these restrictions for security reasons,
+    nudging webapps such that anything that needs authentication will
+    only have read-only access, and anything that does affect state /
+    the database shouldn't be important enough to need authentication.
 
-  If that is the intention, then it comes across as quite unnecessary
-  in my opinion, since a `KeyboardButton`-initiated webapp frontend could
-  also modify state using requests to a backend web server anyway,
-  why not allow it to forward info to the
-  bot server using the submit button on the webapp to send
-  a message in the DM chat as well?
+    If that is the intention, then it comes across as quite unnecessary
+    in my opinion, since a `KeyboardButton`-initiated webapp frontend could
+    also modify state using requests to a backend web server anyway,
+    why not allow it to forward info to the
+    bot server using the submit button on the webapp to send
+    a message in the DM chat as well?
 
-You might be wondering why not just send all the poll info in url
-generation process rather than just the poll_id + a call to the backend later?
+You might be wondering: why not just send all the poll info
+(poll title, choices) in the GET params of the link created in the url
+generation process rather than the current approach of
+just inserting the poll_id,
+and then having the webapp make a request to the backend
+to retrieve the aforementioned
+poll info later?
 
 The issue with that approach is that if the poll info ever changes
 (most notably if we change the title of the poll) we wouldn't be able to reflect
