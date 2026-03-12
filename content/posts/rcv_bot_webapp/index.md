@@ -211,6 +211,9 @@ The issue with that approach is that if the poll info ever changes
 that change in the webapp since all the info is in the button's associated
 URL, and that URL is fixed upon generation.
 
+Hence the current approach of creating a link with the poll ID, and
+looking up [TODO]
+
 ## The web backend
 
 ## The chatbot backend (again)
