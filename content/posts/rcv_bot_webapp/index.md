@@ -212,7 +212,29 @@ that change in the webapp since all the info is in the button's associated
 URL, and that URL is fixed upon generation.
 
 Hence the current approach of creating a link with the poll ID, and
-looking up [TODO]
+looking up the choices + title of the poll from the frontend of the webapp
+by making a request to a separate webapp backend using the poll ID:
+
+```typescript
+const fetch_poll = async (poll_id: number) => {
+  const backend_url = get_backend_url();
+  const endpoint = `${backend_url}/fetch_poll`;
+
+  const request = axios.post(
+    endpoint,
+    { poll_id: poll_id },
+    {
+      headers: { 'Content-Type': 'application/json' },
+      timeout: 30 * 1000,
+    },
+  );
+
+  const response = await request;
+  return response;
+};
+```
+
+[`🔗 App.tsx : 42`](https://github.com/milselarch/RCV-tele-bot/blob/6c17375577a3c28d9893a69a2cc3c2a72b1bf88d/telegram-webapp/src/App.tsx#L41)
 
 ## The web backend
 
