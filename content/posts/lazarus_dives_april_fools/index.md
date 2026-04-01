@@ -7,7 +7,7 @@ draft: false
 edgy: true
 slug: /blog/lazarus-mogs-dives/
 tags:
-  - GenAlpha
+  - BrainRot
   - AprilFools
 ---
 
