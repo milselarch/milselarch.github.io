@@ -8,6 +8,7 @@ edgy: true
 slug: /blog/lazarus-mogs-dives/
 tags:
   - GenAlpha
+  - AprilFools
 ---
 
 ## Lazarus mogs Dives - Excerpt Luke 16:19-31 from the Sigma Rizzlord Edition (2067 AD)
