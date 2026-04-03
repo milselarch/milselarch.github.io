@@ -6,9 +6,7 @@ date: 2026-04-01
 draft: false
 edgy: true
 slug: /blog/lazarus-mogs-dives/
-tags:
-  - BrainRot
-  - AprilFools
+tags: []
 ---
 
 ## Lazarus mogs Dives - Excerpt Luke 16:19-31 from the Sigma Rizzlord Edition (2067 AD)
