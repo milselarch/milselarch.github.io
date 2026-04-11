@@ -236,6 +236,26 @@ const fetch_poll = async (poll_id: number) => {
 
 [`🔗 App.tsx : 42`](https://github.com/milselarch/RCV-tele-bot/blob/6c17375577a3c28d9893a69a2cc3c2a72b1bf88d/telegram-webapp/src/App.tsx#L41)
 
+Now if the backend were to accept requests from the frontend code snippet as is
+it would be a huge security problem since there's nothing preventing any random joe
+on the internet from querying `/fetch_poll` as long as they know the `poll_id`.
+Or maybe not even, since they could just span the endpoint with plausible poll_id values
+instead as well.
+
+To authenticate ourselves to the web backend, we retrieve the `GET` params
+from the link and put it in the `telegram-data` headers of our backend request
+
+```typescript
+const headers = load_tele_headers();
+const has_credential = headers !== '';
+
+set_has_credential(has_credential);
+
+if (has_credential) {
+  axios.defaults.headers.common['telegram-data'] = headers;
+}
+```
+
 ## The web backend
 
 ## The chatbot backend (again)
