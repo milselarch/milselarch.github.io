@@ -242,19 +242,58 @@ on the internet from querying `/fetch_poll` as long as they know the `poll_id`.
 Or maybe not even, since they could just span the endpoint with plausible poll_id values
 instead as well.
 
-To authenticate ourselves to the web backend, we retrieve the `GET` params
-from the link and put it in the `telegram-data` headers of our backend request
+Anyway, to authenticate ourselves to the web backend, what I've done is to retrieve
+the `GET` params from the link and put it in the `telegram-data` HTTP request header of  
+the backend request
 
 ```typescript
-const headers = load_tele_headers();
-const has_credential = headers !== '';
+const load_tele_headers = () => {
+  let headers = window?.Telegram?.WebApp?.initData ?? '';
 
-set_has_credential(has_credential);
+  if (headers === '') {
+    // Treat GET params as the source for data to be insserted
+    // into telegram-data headers if telegram itself doesnt provide it
+    // (which is the case right now since we're using KeyboardButton
+    // rather than InlinkeKeyboardButton)
+    headers = window.location.search;
+  }
 
-if (has_credential) {
-  axios.defaults.headers.common['telegram-data'] = headers;
-}
+  return headers;
+};
 ```
+
+[`🔗 App.tsx : 21`](https://github.com/milselarch/RCV-tele-bot/blob/6c17375577a3c28d9893a69a2cc3c2a72b1bf88d/telegram-webapp/src/App.tsx#L21)
+
+Finally, after setting `telegram-data` headers using the `GET` params
+in the link used to open the webapp to begin with, we are ready to make
+the POST request to the webapp backend to retrieve info about the relevant poll:
+
+```typescript
+useEffect(() => {
+  const headers = load_tele_headers()
+  const has_credential = headers !== ''
+  set_has_credential(has_credential);
+
+  if (has_credential) {
+    axios.defaults.headers.common['telegram-data'] = headers;
+  }
+  // ...
+
+  fetch_poll(poll_id).then((response) => {
+    if (response === null) { throw 'REQUEST FAILED' }
+    const poll: Poll = response.data;
+    set_status(null)
+    set_poll(poll)
+
+  }).catch((error) => {
+    ...
+  }).finally(() => {
+    set_loading(false)
+  });
+}, [])
+```
+
+[`🔗 App.tsx : 152`](https://github.com/milselarch/RCV-tele-bot/blob/6c17375577a3c28d9893a69a2cc3c2a72b1bf88d/telegram-webapp/src/App.tsx#L152)
 
 ## The web backend
 
