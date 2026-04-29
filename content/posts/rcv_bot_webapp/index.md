@@ -4,7 +4,7 @@ description: An overview for how I added an integrated
   webapp to my ranked choice voting telegram bot
 date: 2025-11-06
 draft: false
-slug: /blog/adding-webapp-to-rcv-bot/
+slug: /blog/adding-webapp-to-rcv-bots/
 tags:
   - Telegram
   - JWT
@@ -185,7 +185,6 @@ the webapp via an inline keyboard button.
   info inserted into link's GET params manually to mimic what
   Telegram itself does with _inline keyboard buttons_ in the link
   generation process.
-
   - I'm assuming telegram added these restrictions for security reasons,
     nudging webapps such that anything that needs authentication will
     only have read-only access, and anything that does affect state /
@@ -270,8 +269,8 @@ the POST request to the webapp backend to retrieve info about the relevant poll:
 
 ```typescript
 useEffect(() => {
-  const headers = load_tele_headers()
-  const has_credential = headers !== ''
+  const headers = load_tele_headers();
+  const has_credential = headers !== '';
   set_has_credential(has_credential);
 
   if (has_credential) {
@@ -279,23 +278,124 @@ useEffect(() => {
   }
   // ...
 
-  fetch_poll(poll_id).then((response) => {
-    if (response === null) { throw 'REQUEST FAILED' }
-    const poll: Poll = response.data;
-    set_status(null)
-    set_poll(poll)
-
-  }).catch((error) => {
-    ...
-  }).finally(() => {
-    set_loading(false)
-  });
-}, [])
+  fetch_poll(poll_id)
+    .then(response => {
+      if (response === null) {
+        throw 'REQUEST FAILED';
+      }
+      const poll: Poll = response.data;
+      set_status(null);
+      set_poll(poll);
+    })
+    .catch(error => {
+      // ...
+    })
+    .finally(() => {
+      set_loading(false);
+    });
+}, []);
 ```
 
 [`🔗 App.tsx : 152`](https://github.com/milselarch/RCV-tele-bot/blob/6c17375577a3c28d9893a69a2cc3c2a72b1bf88d/telegram-webapp/src/App.tsx#L152)
 
 ## The web backend
+
+The web backend runs off of a FastAPI server:
+
+```python:title=webapp.py
+app = FastAPI()
+vote_app = VotingWebApp()
+app.include_router(vote_app.router)
+# ...
+app.add_middleware(VerifyMiddleware)
+```
+
+The `VerifyMiddleware` retrieves the telegram headers in the
+request and checks that the data in the headers came from
+the bot backend to begin with, by regenerating the signature
+for the data payload in the headers and checking that its the same
+as the signature also passed along into the headers:
+
+```python:title=webapp.py
+class VerifyMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        # ...
+        telegram_data_header = request.headers.get(TELEGRAM_DATA_HEADER)
+        # ...
+        user_params = self.check_authorization(telegram_data_header)
+        # ...
+        return await call_next(request)
+
+    @classmethod
+    def parse_auth_string(cls, init_data: str):
+        params = parse_qs(init_data)
+        signature = params.get('hash', [None])[0]
+        if signature is None:
+            return None
+
+        data_check_string = BaseAPI.make_data_check_string(
+            auth_date=params.get('auth_date', [''])[0],
+            query_id=params.get('query_id', [''])[0],
+            user=params.get('user', [''])[0]
+        )
+        return data_check_string, signature, params
+
+    @classmethod
+    def check_authorization(cls, init_data: str) -> Optional[dict]:
+        parse_result = cls.parse_auth_string(init_data)
+        data_check_string, signature, params = parse_result
+        validation_hash = BaseAPI.sign_data_check_string(
+            data_check_string=data_check_string
+        )
+
+        if validation_hash == signature:
+            return {k: v[0] for k, v in params.items()}
+
+        return None
+```
+
+Since one of the parameters in the payload being signed is the user
+sending this request, we can trust the authenticity of the user info
+passed in here once it gets validated by the middleware, and use it
+in the actual endpoint handler itself:
+
+```python:title=webapp.py
+def fetch_poll_endpoint(
+    self, request: Request, payload: FetchPollPayload
+):
+    telegram_data_header = request.headers.get(TELEGRAM_DATA_HEADER)
+    parsed_query = parse_qs(telegram_data_header)
+    user_json_str = unquote(parsed_query['user'][0])
+    user_info = json.loads(user_json_str)
+
+    tele_id = int(user_info['id'])
+    user_res = Users.get_from_tele_id(tele_id)
+    if user_res.is_err():
+        return JSONResponse(
+            status_code=400, content={'error': 'User not found'}
+        )
+    user = user_res.unwrap()
+    if user.is_deleted():
+        return JSONResponse(
+            status_code=403, content={'error': 'User is deleted'}
+        )
+
+    user_id = user.get_user_id()
+    username = user_info['username']
+    read_poll_result = self.read_poll_info(
+        poll_id=payload.poll_id, user_id=user_id,
+        username=username, chat_id=None
+    )
+
+    if read_poll_result.is_err():
+        error = read_poll_result.err()
+        return JSONResponse(
+            status_code=500, content={'error': error.get_content()}
+        )
+
+    poll_info = read_poll_result.unwrap()
+    return dataclasses.asdict(poll_info)
+```
 
 ## The chatbot backend (again)
 
