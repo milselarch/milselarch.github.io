@@ -310,6 +310,8 @@ app.include_router(vote_app.router)
 app.add_middleware(VerifyMiddleware)
 ```
 
+[`🔗 webapp.py : 152`](https://github.com/milselarch/RCV-tele-bot/blob/master/webapp.py#L164)
+
 The `VerifyMiddleware` retrieves the telegram headers in the
 request and checks that the data in the headers came from
 the bot backend to begin with, by regenerating the signature
@@ -323,6 +325,11 @@ class VerifyMiddleware(BaseHTTPMiddleware):
         telegram_data_header = request.headers.get(TELEGRAM_DATA_HEADER)
         # ...
         user_params = self.check_authorization(telegram_data_header)
+
+        if user_params is None:
+            content = {'detail': 'Unauthorized'}
+            return JSONResponse(content=content, status_code=401)
+
         # ...
         return await call_next(request)
 
@@ -354,8 +361,10 @@ class VerifyMiddleware(BaseHTTPMiddleware):
         return None
 ```
 
+[`🔗 webapp.py : 131`](https://github.com/milselarch/RCV-tele-bot/blob/master/webapp.py#L131)
+
 Since one of the parameters in the payload being signed is the user
-sending this request, we can trust the authenticity of the user info
+sending this request, we can trust the authenticity [1] of the user info
 passed in here once it gets validated by the middleware, and use it
 in the actual endpoint handler itself:
 
@@ -370,15 +379,9 @@ def fetch_poll_endpoint(
 
     tele_id = int(user_info['id'])
     user_res = Users.get_from_tele_id(tele_id)
-    if user_res.is_err():
-        return JSONResponse(
-            status_code=400, content={'error': 'User not found'}
-        )
+    # ...
     user = user_res.unwrap()
-    if user.is_deleted():
-        return JSONResponse(
-            status_code=403, content={'error': 'User is deleted'}
-        )
+    # ...
 
     user_id = user.get_user_id()
     username = user_info['username']
@@ -387,15 +390,20 @@ def fetch_poll_endpoint(
         username=username, chat_id=None
     )
 
-    if read_poll_result.is_err():
-        error = read_poll_result.err()
-        return JSONResponse(
-            status_code=500, content={'error': error.get_content()}
-        )
-
+    # ...
     poll_info = read_poll_result.unwrap()
     return dataclasses.asdict(poll_info)
 ```
+
+[`🔗 webapp.py : 117`](https://github.com/milselarch/RCV-tele-bot/blob/master/webapp.py#L117)
+
+## The web frontend (again)
+
+Upon receiving a response from the web backend with information about
+the relevant poll, the rest of the React code of the
+frontend can do its magic and render a list of poll options to vote for:
+
+![ranked vote selection on webapp frontend](./rcv_webapp_screenshot.png)
 
 ## The chatbot backend (again)
 
@@ -436,3 +444,19 @@ Was it really worth all this trouble just to be able to both of these
 things? Probably not, and I certainly wish Telegram didn't box in the
 functionality in the inline / regular keyboard buttons respectively,
 but at least it all got worked out at the end I suppose.
+
+[1] One implicit assumption about all this is that while
+the user information payload + signature combo passed into
+webapp link can be used to guarantee that the whole thing was generated
+from us, theoretically as far as ensuring authenticity goes there isn't
+actually anything to prevent the link from being stolen by / given to
+someone else, who would then use it to vote on behalf of the user that the
+link was originally generated for.
+
+However, in practice this shouldn't be a problem since the generated link
+itself is never directly visible / copyable, and it only ever gets
+opened by the user when they click on the "Vote for Poll..."
+button in a direct chat with the bot, and opened within a telegram
+webview that doesn't show the underlying webapp link at that. Now technically
+there are ways for the user to retrieve the webapp link still,
+but they would _really_ have to go out of their way to get it.
