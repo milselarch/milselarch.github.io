@@ -364,7 +364,7 @@ class VerifyMiddleware(BaseHTTPMiddleware):
 [`🔗 webapp.py : 131`](https://github.com/milselarch/RCV-tele-bot/blob/master/webapp.py#L131)
 
 Since one of the parameters in the payload being signed is the user
-sending this request, we can trust the authenticity [1] of the user info
+sending this request, we can trust the authenticity (\*) of the user info
 passed in here once it gets validated by the middleware, and use it
 in the actual endpoint handler itself:
 
@@ -397,55 +397,7 @@ def fetch_poll_endpoint(
 
 [`🔗 webapp.py : 117`](https://github.com/milselarch/RCV-tele-bot/blob/master/webapp.py#L117)
 
-## The web frontend (again)
-
-Upon receiving a response from the web backend with information about
-the relevant poll, the rest of the React code of the
-frontend can do its magic and render a list of poll options to vote for:
-
-![ranked vote selection on webapp frontend](./rcv_webapp_screenshot.png)
-
-## The chatbot backend (again)
-
-Upon receiving all the stated fields, the telegram bot server will:
-
-1. Do an authorization check -  
-   The bot server will recompute the signature of `ref_info` and check it
-   against `ref_hash` and check that they are the same before allowing
-   any voting relation actions to be performed
-   - This ensures that the contents of `ref_info` that were received by the
-     telegram bot server could only have generated from telegram bot server itself,
-     since only we can create the matching signature using our secret key.
-2. cast a vote for poll with the `poll_id` that is described in `ref_info`
-
-- You probably noticed that there a couple of other fields in `ref_info`
-  other than `poll_id`
-  - `auth_date` - a timestamp for when the link is being generated  
-    Originally I was going to have links auto-expire after a certain amount of
-    time to prevent replay attacks, but I decided against this
-    for user experience reasons -
-    I felt it might be off-putting to have the user open the link to the webapp
-    only for the webapp to tell them their link has expired, so this field isn't
-    actively checked against, so it actually doesn't add anything right now
-    security-wise.
-  - `ref_message_id` - if the link was generated as a result as
-    (TODO: the flow for this is rather involved, maybe that could be another
-    blog post)
-
-## Conclusion
-
-Getting the webapp up in telegram was quite a bit of work, and quite
-a lot of the effort went into making sure that we can both pass data
-to the telegram webapp from the chat, and forward data from the
-telegram webapp directly back into said chat, and overcome Telegram's
-restrictions against doing both in the process.
-
-Was it really worth all this trouble just to be able to both of these
-things? Probably not, and I certainly wish Telegram didn't box in the
-functionality in the inline / regular keyboard buttons respectively,
-but at least it all got worked out at the end I suppose.
-
-[1] One implicit assumption about all this is that while
+(\*) One implicit assumption about all this is that while
 the user information payload + signature combo passed into
 webapp link can be used to guarantee that the whole thing was generated
 from us, theoretically as far as ensuring authenticity goes there isn't
@@ -460,3 +412,100 @@ button in a direct chat with the bot, and opened within a telegram
 webview that doesn't show the underlying webapp link at that. Now technically
 there are ways for the user to retrieve the webapp link still,
 but they would _really_ have to go out of their way to get it.
+
+## The web frontend (again)
+
+Upon receiving a response from the web backend with information about
+the relevant poll, the rest of the React code on the
+frontend can do its magic and render an interactive  
+list of poll options to vote for:
+
+![ranked vote selection on webapp frontend](./rcv_webapp_screenshot.png)
+
+As can be seen from the screenshot, telegram injects
+its own submit button to the web view, and we can hook into it
+from React using components imported from
+[@vkruglikov/react-telegram-web-app](https://github.com/vkruglikov/react-telegram-web-app)
+
+```tsx:title=App.tsx
+import {
+  MainButton, WebAppProvider, useThemeParams
+} from '@vkruglikov/react-telegram-web-app';
+
+function App() {
+  // ...
+  return (
+    <div className="App">
+      <header className="App-header">
+        {/* ... */}
+        <WebAppProvider>
+          <MainButton
+            text="Cast Vote" onClick={submit_vote_handler}
+          />
+        </WebAppProvider>
+      </header>
+    </div>
+  )
+}
+```
+
+Telegram injects its own methods and attributes into the global
+`window` object when loading the webapp, among which is a handler
+for passing data back to the bot server which we will use in the
+`submit_vote_handler`:
+
+```tsx:title=App.tsx
+const submit_vote_handler = () => {
+  // ...
+  window.Telegram.WebApp.sendData(JSON.stringify({
+    'poll_id': poll.metadata.id, 'option_numbers': final_vote_rankings,
+    'ref_info': ref_info, 'ref_hash': ref_hash
+  }));
+}
+```
+
+## The chatbot backend (again)
+
+Upon receiving all the stated fields, the telegram bot server will
+attempt to cast a vote, and that's the end of that:
+
+```python:title=bot.py
+class RankedChoiceBot(BaseAPI):
+  # ...
+  @track_errors
+  async def web_app_handler(
+      self, update: ModifiedTeleUpdate, context: ContextTypes.DEFAULT_TYPE
+  ):
+      message: Message = update.message
+      payload = json.loads(update.effective_message.web_app_data.data)
+
+      # ...
+      vote_result = self.register_vote(
+          poll_id=poll_id, rankings=ranked_option_numbers,
+          user_tele_id=user_tele_id, username=username,
+          chat_id=message.chat_id
+      )
+
+      if vote_result.is_err():
+          error_message = vote_result.err()
+          await error_message.call(message.reply_text)
+          return False
+
+      await TelegramHelpers.send_post_vote_reply(
+          message=message, poll_id=poll_id
+      )
+      # ...
+```
+
+## Conclusion
+
+Getting the webapp up in telegram was quite a bit of work, and quite
+a lot of the effort went into making sure that we can both pass data
+to the telegram webapp from the chat, and forward data from the
+telegram webapp directly back into said chat, and overcome Telegram's
+restrictions against doing both in the process.
+
+Was it really worth all this trouble just to be able to both of these
+things? Probably not, and I certainly wish Telegram didn't box in the
+functionality in the inline / regular keyboard buttons respectively,
+but at least setting this all up worked out at the end I suppose.
