@@ -56,6 +56,11 @@ Modifications and new code are licensed under GPLv3.
 | White          | ![#e6f1ff](https://via.placeholder.com/10/e6f1ff?text=+) `#e6f1ff` |
 | Green          | ![#64ffda](https://via.placeholder.com/10/64ffda?text=+) `#64ffda` |
 
+## Notes
+
+styles for the markdown docs are in `PrismStyles.js`  
+all markdown documents (posts, projects etc.) are in `content/`
+
 ## Bugs
 
 - running `npm build` while the running it locally in dev can

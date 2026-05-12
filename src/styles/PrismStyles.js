@@ -34,7 +34,7 @@ const PrismStyles = css`
     background-color: ${prismColors.bg};
     color: ${prismColors.grey};
     border-radius: var(--border-radius);
-    margin: 2em 0;
+    margin: 1rem 0;
     padding: 1.25em;
     overflow: auto;
     position: relative;

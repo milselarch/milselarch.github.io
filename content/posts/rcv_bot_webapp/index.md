@@ -1,13 +1,14 @@
 ---
 title: Adding a webapp inside Telegram
-description: An overview for how I added an integrated
-  webapp to my ranked choice voting telegram bot
-date: 2025-11-06
-draft: true
-slug: /blog/adding-webapp-to-rcv-bot/
+description: An overview for how an integrated
+  webapp was added to my ranked choice voting telegram bot
+date: 2026-15-12
+draft: false
+slug: /blog/adding-webapp-to-rcv-bots/
 tags:
   - Telegram
-  - JWT
+  - React
+  - FastAPI
 ---
 
 My original plan for user input into my
@@ -52,6 +53,494 @@ def build_private_vote_markup(
     return markup_layout
 ```
 
+[`🔗 base_api.py : 525`](https://github.com/milselarch/RCV-tele-bot/blob/6c17375577a3c28d9893a69a2cc3c2a72b1bf88d/base_api.py#L525)
+
+Because this is just going to be a link to another webpage,
+the only way to pass information to the web frontend about the user and the poll
+would be via the link itself i.e. `GET` params that are
+inserted into the link. The codebase does precisely that,
+passing in params like the poll id and
+tele_user (to insert the user ID to query params) into `generate_poll_url`
+to create a webapp URL that embeds poll and user info in its `GET` params:
+
+```python:title=base_api.py
+@classmethod
+def generate_poll_url(
+    cls, poll_id: int, tele_user: TeleUser,
+    ref_message_id: int = BLANK_ID, ref_chat_id: int = BLANK_ID
+) -> str:
+    ...
+    req = PreparedRequest()
+    auth_date = str(int(time.time()))
+    query_id = cls.generate_secret()
+    ...
+    ref_info = f'{auth_date}:{poll_id}:{ref_message_id}:{ref_chat_id}'
+    ref_hash = cls.sign_data_check_string(ref_info)
+
+    params = {
+        ...
+        'ref_info': ref_info,
+        'ref_hash': ref_hash
+    }
+    req.prepare_url(WEBHOOK_URL, params)
+    return req.url
+```
+
+[`🔗 base_api.py : 492`](https://github.com/milselarch/RCV-tele-bot/blob/6c17375577a3c28d9893a69a2cc3c2a72b1bf88d/base_api.py#492)
+
+Now if we had done this via a naive approach of just inserting
+the poll ID and user ID into the URL directly, and expecting the
+webapp to accept that data as-is, it would be potentially problematic
+in that anyone could hand-craft their own webapp URL and
+load information about the poll even they aren't one of the its's
+voters.
+
+So what we do instead is create a signed payload, put in the webapp
+URL and when it forwards it the backend to verify the authenticity
+of the sending user before sending back relevant poll info
+and allowing the user to vote.
+
+For the creation of the signed payload, we do the following:
+
+1. we create a string `ref_info`
+   encoding the intended poll ID that the user wants to vote for, as well as
+   a couple of other fields
+2. we also create a signature `ref_hash` created from
+   a HMAC hash of `ref_info` and the telegram bot's secret key; both
+   which will be passed back to the telegram bot along with the
+   `poll_id` as well as the user's ranked-choice vote when they
+   press the submit button in the telegram webapp.
+
+I was originally going to use a JWT payload that gets
+base64 encoded before being inserted
+into the URL `GET` params instead of this custom colon delimited string
+\+ `HMAC` signature, but ended up deciding against it for fear that
+the result `GET` params would be too long (in hindsight this might be
+a bit of a premature optimization)
+
+Anyway, as far as the user flow is concerned:
+(all this could be its own mini-blog post some other time)
+
+1. there's a bunch
+   of other code that exists for the user to issue a command to
+   view a specific poll from within a group chat
+2. upon which the bot will respond with a message about the info
+   about said poll. The code that generates said message will also
+   attach a button prompting the user to vote in a DM chat with the bot
+   (This is the _vote via direct chat_ button)
+   <br/>  
+   ![DM chat webapp button screenshot](./dm_redirect.jpg)
+   <br/>
+3. clicking the button redirects the user to a DM chat with the bot,
+   as well as automatically send the `/start` command in said DM chat
+   (along with some hidden context info saying that `/start`
+   command came from the aforementioned button
+   prompting the user to vote in a DM chat with the bot).
+4. The following handler responds to the `/start` command
+   with a message containing the poll info,
+   as well as insert a button into the DM chat that will open the webapp:
+
+```python:title=start_handlers.py
+async def handle_messages(
+    self, update: ModifiedTeleUpdate, context: ContextTypes.DEFAULT_TYPE,
+    raw_payload: str
+):
+    ...
+    view_poll_result = BaseAPI.get_poll_message(
+        poll_id=poll_id, user_id=user_id,
+        bot_username=context.bot.username,
+        username=tele_user.username,
+        add_instructions=update.is_group_chat()
+    )
+
+    if view_poll_result.is_err():
+        error_message = view_poll_result.err()
+        await error_message.call(message.reply_text)
+        return False
+
+    poll_message = view_poll_result.unwrap()
+    reply_markup = ReplyKeyboardMarkup(
+        BaseAPI.build_private_vote_markup(
+            poll_id=poll_id, tele_user=tele_user
+        )
+    )
+    return await message.reply_text(
+        poll_message.text, reply_markup=reply_markup
+    )
+```
+
+[`🔗 start_handlers.py : 28`](https://github.com/milselarch/RCV-tele-bot/blob/master/handlers/start_handlers.py#L28)
+
+The messages + button generated by the above code in
+the DM chat will look like the following screenshot, and clicking
+on the button will open an embedded webview with the link we
+generated earlier:
+
+![DM chat webapp button screenshot](./rm_webapp_button.png)
+
 ## The web frontend
 
+It would be a little dishonest to claim that the idea of using
+the `ref_info` payload and signing it using the bot's secret key is a wholly
+original idea - as in fact I actually copied the idea from the authentication
+headers + signature that telegram itself inserts into the embedded
+browser's global variables at `window.Telegram.WebApp.initData` if you
+were to open the webapp via an inline keyboard button.
+
+- Note that I wrote _inline keyboard button_, not _keyboard button_ like we've
+  been using thus far in all the code snippets so far in the telegram bot.
+
+  As it turns out telegram will _not_ generate authentication
+  headers and put them into `window.Telegram.WebApp.initData` for you in
+  your webapp when you use `InlineKeyboardButton` instead of `KeyboardButton`,
+  but the flip side to that is that `InlineKeyboardButton` allows the webapp
+  to send messages to chat after webapp submission while `KeyboardButton` doesn't.
+
+  I don't really understand why I have to choose between
+  being able to receive user information from the chat into the webapp
+  and being able to send messages from the webapp, but regardless
+  the desire to do both lead to my solution of
+  sending out _keyboard buttons_ with the link to the webapp, but with user
+  info inserted into link's GET params manually to mimic what
+  Telegram itself does with _inline keyboard buttons_ in the link
+  generation process.
+  - I'm assuming telegram added these restrictions for security reasons,
+    nudging webapps such that anything that needs authentication will
+    only have read-only access, and anything that does affect state /
+    the database shouldn't be important enough to need authentication.
+
+    If that is the intention, then it comes across as quite unnecessary
+    in my opinion, since a `KeyboardButton`-initiated webapp frontend could
+    also modify state using requests to a backend web server anyway,
+    why not allow it to forward info to the
+    bot server using the submit button on the webapp to send
+    a message in the DM chat as well?
+
+You might also be wondering: why not just send all the poll info
+(poll title, choices) in the GET params of the link created in the url
+generation process rather than the current approach of
+just inserting the poll_id,
+and then have the webapp make a request to the backend
+to retrieve the aforementioned
+poll info later?
+
+1. The issue with that approach is that if information about the poll ever changes
+   (most notably if we change the title of the poll) we wouldn't be able to reflect
+   that change in the webapp since all the info is in the button's associated
+   URL, and that URL is fixed upon button creation.
+2. Hence the current approach of creating a link with the poll ID, and
+   looking up the choices + title of the poll from the frontend of the webapp
+   by making a request to a separate webapp backend using the poll ID:
+
+```typescript
+const fetch_poll = async (poll_id: number) => {
+  const backend_url = get_backend_url();
+  const endpoint = `${backend_url}/fetch_poll`;
+
+  const request = axios.post(
+    endpoint,
+    { poll_id: poll_id },
+    {
+      headers: { 'Content-Type': 'application/json' },
+      timeout: 30 * 1000,
+    },
+  );
+
+  const response = await request;
+  return response;
+};
+```
+
+[`🔗 App.tsx : 42`](https://github.com/milselarch/RCV-tele-bot/blob/6c17375577a3c28d9893a69a2cc3c2a72b1bf88d/telegram-webapp/src/App.tsx#L41)
+
+Now if the backend were to accept requests from the frontend code snippet as is
+it would be a huge security problem since there's nothing preventing any random joe
+on the internet from querying `/fetch_poll` as long as they know the `poll_id`.
+Or maybe not even, since they could just span the endpoint with plausible poll_id values
+instead as well.
+
+And so, to authenticate ourselves to the web backend, what I've done is to retrieve
+the `GET` params from the link (containing the signed payload as mentioned earlier)
+and forward it to the backend by putting it in the `telegram-data` HTTP request
+header of the backend request, with the expectation that the backend
+will authenticate the payload sent:
+
+```typescript
+const load_tele_headers = () => {
+  let headers = window?.Telegram?.WebApp?.initData ?? '';
+
+  if (headers === '') {
+    // Treat GET params as the source for data to be insserted
+    // into telegram-data headers if telegram itself doesnt provide it
+    // (which is the case right now since we're using KeyboardButton
+    // rather than InlinkeKeyboardButton)
+    headers = window.location.search;
+  }
+
+  return headers;
+};
+```
+
+[`🔗 App.tsx : 21`](https://github.com/milselarch/RCV-tele-bot/blob/6c17375577a3c28d9893a69a2cc3c2a72b1bf88d/telegram-webapp/src/App.tsx#L21)
+
+Finally, after setting `telegram-data` headers using the `GET` params
+in the link used to open the webapp to begin with, we are ready to make
+the POST request to the webapp backend to retrieve info about the relevant poll:
+
+```typescript
+useEffect(() => {
+  const headers = load_tele_headers();
+  const has_credential = headers !== '';
+  set_has_credential(has_credential);
+
+  if (has_credential) {
+    axios.defaults.headers.common['telegram-data'] = headers;
+  }
+  // ...
+
+  fetch_poll(poll_id)
+    .then(response => {
+      if (response === null) {
+        throw 'REQUEST FAILED';
+      }
+      const poll: Poll = response.data;
+      set_status(null);
+      set_poll(poll);
+    })
+    .catch(error => {
+      // ...
+    })
+    .finally(() => {
+      set_loading(false);
+    });
+}, []);
+```
+
+[`🔗 App.tsx : 152`](https://github.com/milselarch/RCV-tele-bot/blob/6c17375577a3c28d9893a69a2cc3c2a72b1bf88d/telegram-webapp/src/App.tsx#L152)
+
 ## The web backend
+
+The web backend runs off of a FastAPI server:
+
+```python:title=webapp.py
+app = FastAPI()
+vote_app = VotingWebApp()
+app.include_router(vote_app.router)
+# ...
+app.add_middleware(VerifyMiddleware)
+```
+
+[`🔗 webapp.py : 152`](https://github.com/milselarch/RCV-tele-bot/blob/master/webapp.py#L164)
+
+The `VerifyMiddleware` retrieves the telegram headers in the
+request and checks that the data in the headers came from
+the bot backend to begin with, by regenerating the signature
+for the data payload in the request headers and checking that it's the same
+as the signature also passed along into the request headers:
+
+```python:title=webapp.py
+class VerifyMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        # ...
+        telegram_data_header = request.headers.get(TELEGRAM_DATA_HEADER)
+        # ...
+        user_params = self.check_authorization(telegram_data_header)
+
+        if user_params is None:
+            content = {'detail': 'Unauthorized'}
+            return JSONResponse(content=content, status_code=401)
+
+        # ...
+        return await call_next(request)
+
+    @classmethod
+    def parse_auth_string(cls, init_data: str):
+        params = parse_qs(init_data)
+        signature = params.get('hash', [None])[0]
+        if signature is None:
+            return None
+
+        data_check_string = BaseAPI.make_data_check_string(
+            auth_date=params.get('auth_date', [''])[0],
+            query_id=params.get('query_id', [''])[0],
+            user=params.get('user', [''])[0]
+        )
+        return data_check_string, signature, params
+
+    @classmethod
+    def check_authorization(cls, init_data: str) -> Optional[dict]:
+        parse_result = cls.parse_auth_string(init_data)
+        data_check_string, signature, params = parse_result
+        validation_hash = BaseAPI.sign_data_check_string(
+            data_check_string=data_check_string
+        )
+
+        if validation_hash == signature:
+            return {k: v[0] for k, v in params.items()}
+
+        return None
+```
+
+[`🔗 webapp.py : 131`](https://github.com/milselarch/RCV-tele-bot/blob/master/webapp.py#L131)
+
+Since one of the parameters in the payload being signed is the user
+sending this request, we can trust the authenticity (\*) of the user info
+passed in here once it gets validated by the middleware, and use it
+in the actual endpoint handler itself:
+
+```python:title=webapp.py
+def fetch_poll_endpoint(
+    self, request: Request, payload: FetchPollPayload
+):
+    telegram_data_header = request.headers.get(TELEGRAM_DATA_HEADER)
+    parsed_query = parse_qs(telegram_data_header)
+    user_json_str = unquote(parsed_query['user'][0])
+    user_info = json.loads(user_json_str)
+
+    tele_id = int(user_info['id'])
+    user_res = Users.get_from_tele_id(tele_id)
+    # ...
+    user = user_res.unwrap()
+    # ...
+
+    user_id = user.get_user_id()
+    username = user_info['username']
+    read_poll_result = self.read_poll_info(
+        poll_id=payload.poll_id, user_id=user_id,
+        username=username, chat_id=None
+    )
+
+    # ...
+    poll_info = read_poll_result.unwrap()
+    return dataclasses.asdict(poll_info)
+```
+
+[`🔗 webapp.py : 117`](https://github.com/milselarch/RCV-tele-bot/blob/master/webapp.py#L117)
+
+(\*) One implicit assumption about all this is that while
+the user information payload + signature combo passed into
+webapp link can be used to guarantee that the whole thing was generated
+from us, theoretically as far as ensuring authenticity goes there isn't
+actually anything to prevent the link from being stolen by / given to
+someone else, who would then use it to vote on behalf of the user that the
+link was originally generated for.
+
+However, in practice this shouldn't be a problem since the generated link
+itself is never directly visible / copyable, and it only ever gets
+opened by the user when they click on the "Vote for Poll..."
+button in a direct chat with the bot, and opened within a telegram
+webview that doesn't show the underlying webapp link at that. Now technically
+there are ways for the user to retrieve the webapp link still,
+but they would _really_ have to go out of their way to get it.
+
+## The web frontend (again)
+
+Upon receiving a response from the web backend with information about
+the relevant poll, the rest of the React code on the
+frontend can do its magic and render an interactive  
+list of poll options to vote for:
+
+![ranked vote selection on webapp frontend](./rcv_webapp_screenshot.png)
+
+As can be seen from the screenshot, telegram injects
+its own submit button to the web view, and we can hook into it
+from React using components imported from
+[@vkruglikov/react-telegram-web-app](https://github.com/vkruglikov/react-telegram-web-app)
+
+```tsx:title=App.tsx
+import {
+  MainButton, WebAppProvider, useThemeParams
+} from '@vkruglikov/react-telegram-web-app';
+
+function App() {
+  // ...
+  return (
+    <div className="App">
+      <header className="App-header">
+        {/* ... */}
+        <WebAppProvider>
+          <MainButton
+            text="Cast Vote" onClick={submit_vote_handler}
+          />
+        </WebAppProvider>
+      </header>
+    </div>
+  )
+}
+```
+
+[`🔗 webapp.py : 224`](https://github.com/milselarch/RCV-tele-bot/blob/master/telegram-webapp/src/App.tsx#L224)
+
+Telegram injects its own methods and attributes into the global
+`window` object when loading the webapp, among which is a handler
+for passing data back to the bot server which we will use in the
+`submit_vote_handler`:
+
+```tsx:title=App.tsx
+const submit_vote_handler = () => {
+  // ...
+  window.Telegram.WebApp.sendData(JSON.stringify({
+    'poll_id': poll.metadata.id, 'option_numbers': final_vote_rankings,
+    'ref_info': ref_info, 'ref_hash': ref_hash
+  }));
+}
+```
+
+[`🔗 webapp.py : 146`](https://github.com/milselarch/RCV-tele-bot/blob/master/telegram-webapp/src/App.tsx#L146)
+
+## The chatbot backend (again)
+
+Upon receiving all the stated fields, the telegram bot server will
+attempt to cast a vote, and that's the end of that:
+
+```python:title=bot.py
+class RankedChoiceBot(BaseAPI):
+  #...
+  def start_bot(self):
+      # handle web app updates
+      TelegramHelpers.register_message_handler(
+          self.app, filters.StatusUpdate.WEB_APP_DATA,
+          self.web_app_handler
+      )
+
+  # ...
+  @track_errors
+  async def web_app_handler(
+      self, update: ModifiedTeleUpdate, context: ContextTypes.DEFAULT_TYPE
+  ):
+      message: Message = update.message
+      payload = json.loads(update.effective_message.web_app_data.data)
+
+      # ...
+      vote_result = self.register_vote(
+          poll_id=poll_id, rankings=ranked_option_numbers,
+          user_tele_id=user_tele_id, username=username,
+          chat_id=message.chat_id
+      )
+
+      if vote_result.is_err():
+          error_message = vote_result.err()
+          await error_message.call(message.reply_text)
+          return False
+
+      await TelegramHelpers.send_post_vote_reply(
+          message=message, poll_id=poll_id
+      )
+      # ...
+```
+
+[`🔗 webapp.py : 284`](https://github.com/milselarch/RCV-tele-bot/blob/master/bot.py#L284)
+
+## Conclusion
+
+Getting the webapp up in telegram was quite a bit of work, and quite
+a lot of the effort went into making sure that we can both pass data
+to the telegram webapp from the chat, and forward data from the
+telegram webapp directly back into said chat, and overcome Telegram's
+restrictions against doing both in the process.
+
+Was it really worth all this trouble just to be able to both of these
+things? Probably not, and I certainly wish Telegram didn't box in the
+functionality in the inline / regular keyboard buttons respectively,
+but I am glad that trying to get around that and setting this
+all up ultimately worked out.
