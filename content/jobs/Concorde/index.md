@@ -9,6 +9,8 @@ url: 'https://www.concordesecurity.com/'
 
 - Developed API endpoints for Concorde’s Visitor Management System (VMS)
   using Python, Django, and PostgreSQL.
+- Built a video and audio support helpdesk intercom webapp
+  using Vue.js, TypeScript, FastAPI, WebSockets, and WebRTC
 - Contributed to frontend development of the VMS using React, TypeScript,
   tailwind-CSS, and React Query (useQuery).
 - Developed an integration test suite for the VMS with Playwright (Python)

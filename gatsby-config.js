@@ -4,9 +4,9 @@ module.exports = {
   siteMetadata: {
     title: 'Charles Lim',
     description:
-      'Charles Lim is a software engineer with broad experience in ' +
-      'backend, frontend, devops, and machine learning.',
-    siteUrl: 'https://brittanychiang.com', // No trailing slash allowed!
+      'Charles Lim is a software developer with experience in ' +
+      'backend and frontend web development, devops, and machine learning.',
+    siteUrl: 'https://www.milselarch.com', // No trailing slash allowed!
     image: '/og.png', // Path to your image you placed in the 'static' folder
   },
   plugins: [
