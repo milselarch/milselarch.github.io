@@ -14,7 +14,7 @@ tags:
 Stream Hub is a video and audio support helpdesk intercom webapp
 currently deployed at HDB Hub.  
 Members of the public can start an audio and / or video call with support staff
-deployed at HDB hub by pressing the "Request Assistance" button on the kiosk screen.  
+by pressing the "Request Assistance" button on the kiosk screen.  
 Stream Hub was built using:
 
 1. Vue.js & TypeScript for the frontend,
