@@ -7,6 +7,8 @@ range: 'June 2024 - Present'
 url: 'https://www.concordesecurity.com/'
 ---
 
+- [Built a video + audio support helpdesk intercom system using WebRTC, WebSockets,
+  Vue.js, and FastAPI for HDB Hub.](/blog/stream-hub/)
 - Developed API endpoints for Concorde’s Visitor Management System (VMS)
   using Python, Django, and PostgreSQL.
 - Built a video and audio support helpdesk intercom webapp
