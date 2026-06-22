@@ -6,7 +6,7 @@ draft: false
 edgy: true
 slug: /blog/abominable-intelligence/
 tags:
-  - Politics
+  - AI
 ---
 
 _What is AI?_  
@@ -20,8 +20,7 @@ and use the interpolated value as a prediction. An example:
 - If we had a dataset with numbers representing the cloudiness of the sky
   and the amount of rainfall each day for every day in the past year, we could try to
   fit an equation to that data and then interpolate the amount of rainfall that
-  could be expected for today given the number(s) representing how cloudy today is.  
-  [TODO: linear regression diagram]
+  could be expected for today given the number(s) representing how cloudy today is.
 
 So far so good, predicting stuff sounds innocuous enough -
 
@@ -79,3 +78,24 @@ consume and regurgitate everything and anything on the internet in order to
 > We view this principle as fair to creators, necessary for innovators,
 > and critical for US competitiveness.
 > \- [https://openai.com/index/openai-and-journalism/](https://openai.com/index/openai-and-journalism/)
+
+## Edit - 22/06/2026
+
+So it seems that despite plagiarizing all human creation with neither consent nor compensation,
+AI still manages to be a giant [black hole for money](https://www.wheresyoured.at/exclusive-openai-financials/)
+regardless, solely on the basis of training and inference costs. Previously I was of the opinion that people outright shouldn't pay for
+generative AI services that aren't able to prove they didn't steal their training
+data at all, but perhaps from a utilitarian point of view the more big-brain strategy
+to punish venture capital and pop the bubble would be to jump onto the
+accelarationism bandwagon the get on the
+[tokenmaxxing](https://en.wikipedia.org/wiki/Token_maxxing)
+grindset and optimize the money-burnt-by-AI-companies-to-subscription-cost-paid ratio.
+Or just squeeze as much as possible from the free version of things
+like ChatGPT with inane things like, say, inferring a TypeScript interface
+from one-off JSON payloads from a third party API
+(I think that's a pretty legit use case for generative AI actually).
+
+In the meantime, if you are going to find yourself using ChatGPT anyway,
+I guess you could do worse than to
+[read up this guide on how to minimize the amount of data they leech off of you](https://www.privateinternetaccess.com/blog/chatgpt-privacy/),
+as suggested to me by [Sienna Alamilla](mailto:sienna.alamilla@cyberwebpros.com)
