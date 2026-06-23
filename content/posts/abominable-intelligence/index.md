@@ -82,7 +82,7 @@ consume and regurgitate everything and anything on the internet in order to
 ## Edit - 22/06/2026
 
 So it seems that despite plagiarizing all human creation with neither consent nor compensation,
-AI still manages to be a giant [black hole for money](https://www.wheresyoured.at/exclusive-openai-financials/)
+LLMs still manages to be a giant [money incinerator](https://www.wheresyoured.at/exclusive-openai-financials/)
 regardless, solely on the basis of training and inference costs. Previously I was of the opinion that people outright shouldn't pay for
 generative AI services that aren't able to prove they didn't steal their training
 data at all, but perhaps from a utilitarian point of view the more big-brain strategy
@@ -95,7 +95,10 @@ like ChatGPT with inane things like, say, inferring a TypeScript interface
 from one-off JSON payloads from a third party API
 (I think that's a pretty legit use case for generative AI actually).
 
-In the meantime, if you are going to find yourself using ChatGPT anyway,
+Also, In the meantime, if you are going to find yourself using ChatGPT anyway,
 I guess you could do worse than to
-[read up this guide on how to minimize the amount of data they leech off of you](https://www.privateinternetaccess.com/blog/chatgpt-privacy/),
-as suggested to me by [Sienna Alamilla](mailto:sienna.alamilla@cyberwebpros.com)
+[first read up a guide on how to minimize the amount of data they leech off of you](https://www.privateinternetaccess.com/blog/chatgpt-privacy/) -
+thanks to Sienna Alamilla for suggesting that I bring attention to
+practical ways to maintain your privacy while dealing with ChatGPT when you have to,
+and for being a contributor to the guide as well (or at least that's what I understand
+from our email correspondance?)
