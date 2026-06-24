@@ -25,3 +25,5 @@ Stream Hub was built using:
 3. WebRTC as the protocol for actually transmitting the video and audio call streams.
 
 ![light_dark_kiosk_screens](./light_dark_covers.png)
+
+![callee_page](./callee_page.png)
