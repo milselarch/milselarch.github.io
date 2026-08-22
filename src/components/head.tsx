@@ -1,42 +1,21 @@
-import React from 'react';
 import PropTypes from 'prop-types';
-import { Helmet } from 'react-helmet';
-import { useLocation } from '@reach/router';
-import { useStaticQuery, graphql } from 'gatsby';
-
-// https://www.gatsbyjs.com/docs/add-seo-component/
+import NextHead from 'next/head';
+import { useRouter } from 'next/router';
+import { siteMetadata } from '@/lib/siteMetadata';
 
 const Head = ({ title, description, image }) => {
-  const { pathname } = useLocation();
-
-  const { site } = useStaticQuery(
-    graphql`
-      query {
-        site {
-          siteMetadata {
-            defaultTitle: title
-            defaultDescription: description
-            siteUrl
-            defaultImage: image
-          }
-        }
-      }
-    `,
-  );
-
-  const { defaultTitle, defaultDescription, siteUrl, defaultImage } = site.siteMetadata;
+  const router = useRouter();
 
   const seo = {
-    title: title || defaultTitle,
-    description: description || defaultDescription,
-    image: `${siteUrl}${image || defaultImage}`,
-    url: `${siteUrl}${pathname}`,
+    title: title || siteMetadata.title,
+    description: description || siteMetadata.description,
+    image: `${siteMetadata.siteUrl}${image || siteMetadata.image}`,
+    url: `${siteMetadata.siteUrl}${router.asPath || '/'}`,
   };
 
   return (
-    <Helmet title={title} defaultTitle={seo.title} titleTemplate={`%s | ${defaultTitle}`}>
-      <html lang="en" />
-
+    <NextHead>
+      <title>{title ? `${title} | ${siteMetadata.title}` : siteMetadata.title}</title>
       <meta name="description" content={seo.description} />
       <meta name="image" content={seo.image} />
 
@@ -46,8 +25,9 @@ const Head = ({ title, description, image }) => {
       <meta property="og:url" content={seo.url} />
       <meta property="og:type" content="website" />
 
+      <link rel="canonical" href={seo.url} />
       <meta name="google-site-verification" content="DCl7VAf9tcz6eD9gb67NfkNnJ1PKRNcg8qQiwpbx9Lk" />
-    </Helmet>
+    </NextHead>
   );
 };
 

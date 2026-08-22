@@ -1,9 +1,10 @@
 import React, { useEffect, useRef } from 'react';
-import { StaticImage } from 'gatsby-plugin-image';
+import Image from 'next/image';
 import styled from 'styled-components';
 import config from '@/config.js';
 import sr from '@/utils/sr';
 import { usePrefersReducedMotion } from '@/hooks';
+import mePhoto from '@/images/me.jpg';
 
 const StyledAboutSection = styled.section`
   max-width: 900px;
@@ -125,13 +126,6 @@ const About = () => {
     sr.reveal(revealContainer.current, config.srConfig());
   }, []);
 
-  /*
-  const recentSkills = [
-    'Golang', 'PostgreSQL', 'Docker',
-    'TypeScript', 'tailwind-css', 'React',
-  ];
-  */
-
   const skills = [
     'Python',
     'Golang',
@@ -200,14 +194,7 @@ const About = () => {
 
         <StyledPic>
           <div className="wrapper">
-            <StaticImage
-              className="img"
-              src="../../images/me.jpg"
-              width={500}
-              quality={95}
-              formats={['auto', 'webp', 'avif']}
-              alt="Headshot"
-            />
+            <Image className="img" src={mePhoto} width={500} quality={95} alt="Headshot" />
           </div>
         </StyledPic>
       </div>

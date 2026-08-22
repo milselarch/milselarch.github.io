@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'gatsby';
+import Link from 'next/link';
 import PropTypes from 'prop-types';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import styled, { css } from 'styled-components';
@@ -7,7 +7,7 @@ import { loaderDelay } from '@utils';
 import { useScrollDirection, usePrefersReducedMotion } from '@hooks';
 import Menu from '@/components/menu';
 import { IconLogo, IconHex } from '@components/icons';
-import {NavLinksGroup} from "./NavLinksGroup";
+import { NavLinksGroup } from './NavLinksGroup';
 
 const StyledHeader = styled.header`
   ${({ theme }) => theme.mixins.flexBetween};
@@ -33,7 +33,7 @@ const StyledHeader = styled.header`
 
   @media (prefers-reduced-motion: no-preference) {
     ${props =>
-    props.scrollDirection === 'up' &&
+      props.scrollDirection === 'up' &&
       !props.scrolledToTop &&
       css`
         height: var(--nav-scroll-height);
@@ -43,7 +43,7 @@ const StyledHeader = styled.header`
       `};
 
     ${props =>
-    props.scrollDirection === 'down' &&
+      props.scrollDirection === 'down' &&
       !props.scrolledToTop &&
       css`
         height: var(--nav-scroll-height);
@@ -193,7 +193,7 @@ const Nav = ({ isHome }) => {
           </div>
         </a>
       ) : (
-        <Link to="/" aria-label="home">
+        <Link href="/" aria-label="home">
           <div className="logo-container">
             <IconLogo />
           </div>
@@ -244,8 +244,7 @@ const Nav = ({ isHome }) => {
                   NavLinksGroup({
                     isHome,
                     timeout,
-                  })
-                }
+                  })}
               </TransitionGroup>
 
               {/*

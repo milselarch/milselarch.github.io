@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import styled, { ThemeProvider } from 'styled-components';
+import styled from 'styled-components';
+import { useRouter } from 'next/router';
 import { Head, Loader, Nav, Social, Email, Footer } from '@/components';
-import { GlobalStyle, theme } from '@/styles';
 
 const StyledContent = styled.div`
   display: flex;
@@ -10,11 +10,16 @@ const StyledContent = styled.div`
   min-height: 100vh;
 `;
 
-const Layout = ({ children, location }) => {
-  const isHome = location.pathname === '/';
+const Layout = ({ children, headProps }) => {
+  const router = useRouter();
+  const isHome = router.pathname === '/';
   const [isLoading, setIsLoading] = useState(isHome);
+  const hash = useMemo(() => {
+    const asPath = router.asPath || '';
+    const hashIndex = asPath.indexOf('#');
+    return hashIndex >= 0 ? asPath.slice(hashIndex) : '';
+  }, [router.asPath]);
 
-  // Sets target="_blank" rel="noopener noreferrer" on external links
   const handleExternalLinks = () => {
     const allLinks = Array.from(document.querySelectorAll('a'));
     if (allLinks.length > 0) {
@@ -32,8 +37,8 @@ const Layout = ({ children, location }) => {
       return;
     }
 
-    if (location.hash) {
-      const id = location.hash.substring(1); // location.hash without the '#'
+    if (hash) {
+      const id = hash.substring(1);
       setTimeout(() => {
         const el = document.getElementById(id);
         if (el) {
@@ -44,35 +49,27 @@ const Layout = ({ children, location }) => {
     }
 
     handleExternalLinks();
-  }, [isLoading]);
+  }, [hash, isLoading]);
 
   return (
     <>
-      <Head />
+      <Head {...headProps} />
 
       <div id="root">
-        <ThemeProvider theme={theme}>
-          <GlobalStyle />
+        {isLoading && isHome ? (
+          <Loader finishLoading={() => setIsLoading(false)} />
+        ) : (
+          <StyledContent>
+            <Nav isHome={isHome} />
+            <Social isHome={isHome} />
+            <Email isHome={isHome} />
 
-          <a className="skip-to-content" href="#content">
-            Skip to Content
-          </a>
-
-          {isLoading && isHome ? (
-            <Loader finishLoading={() => setIsLoading(false)} />
-          ) : (
-            <StyledContent>
-              <Nav isHome={isHome} />
-              <Social isHome={isHome} />
-              <Email isHome={isHome} />
-
-              <div id="content">
-                {children}
-                <Footer />
-              </div>
-            </StyledContent>
-          )}
-        </ThemeProvider>
+            <div id="content">
+              {children}
+              <Footer />
+            </div>
+          </StyledContent>
+        )}
       </div>
     </>
   );
@@ -80,7 +77,15 @@ const Layout = ({ children, location }) => {
 
 Layout.propTypes = {
   children: PropTypes.node.isRequired,
-  location: PropTypes.object.isRequired,
+  headProps: PropTypes.shape({
+    title: PropTypes.string,
+    description: PropTypes.string,
+    image: PropTypes.string,
+  }),
+};
+
+Layout.defaultProps = {
+  headProps: {},
 };
 
 export default Layout;

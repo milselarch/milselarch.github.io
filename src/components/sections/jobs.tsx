@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useStaticQuery, graphql } from 'gatsby';
 import { CSSTransition } from 'react-transition-group';
 import styled from 'styled-components';
 import { srConfig } from '@/config.js';
@@ -24,7 +23,6 @@ const StyledJobsSection = styled.section`
       display: block;
     }
 
-    // Prevent container from jumping
     @media (min-width: 700px) {
       min-height: 340px;
     }
@@ -182,55 +180,27 @@ const StyledTabPanel = styled.div`
   }
 `;
 
-const Jobs = () => {
-  const data = useStaticQuery(graphql`
-    query {
-      jobs: allMarkdownRemark(
-        filter: { fileAbsolutePath: { regex: "/content/jobs/" } }
-        sort: { fields: [frontmatter___date], order: DESC }
-      ) {
-        edges {
-          node {
-            frontmatter {
-              title
-              company
-              location
-              range
-              url
-            }
-            html
-          }
-        }
-      }
-      education: allMarkdownRemark(
-        filter: { fileAbsolutePath: { regex: "/content/education/" } }
-        sort: { fields: [frontmatter___date], order: DESC }
-      ) {
-        edges {
-          node {
-            frontmatter {
-              title
-              company
-              location
-              range
-              url
-            }
-            html
-          }
-        }
-      }
-    }
-  `);
+type ExperienceNode = {
+  frontmatter: {
+    title: string;
+    company: string;
+    range: string;
+    url: string;
+  };
+  html: string;
+};
 
-  const jobsData = data.jobs.edges;
-  const educationData = data.education.edges;
-  // eslint-disable-next-line no-console
-  console.log('EDUCATION DATA', educationData);
-
+const Jobs = ({
+  jobsData = [],
+  educationData = [],
+}: {
+  jobsData: ExperienceNode[];
+  educationData: ExperienceNode[];
+}) => {
   const [activeJobsTabId, setActiveJobsTabId] = useState(0);
   const [activeEducationTabId, setActiveEducationTabId] = useState(-1);
-  const [tabFocus, setTabFocus] = useState(null);
-  const tabs = useRef([]);
+  const [tabFocus, setTabFocus] = useState<any>(null);
+  const tabs = useRef<any[]>([]);
   const revealContainer = useRef(null);
   const prefersReducedMotion = usePrefersReducedMotion();
 
@@ -247,20 +217,16 @@ const Jobs = () => {
       tabs.current[tabFocus].focus();
       return;
     }
-    // If we're at the end, go to the start
     if (tabFocus >= tabs.current.length) {
       setTabFocus(0);
     }
-    // If we're at the start, move to the end
     if (tabFocus < 0) {
       setTabFocus(tabs.current.length - 1);
     }
   };
 
-  // Only re-run the effect if tabFocus changes
   useEffect(() => focusTab(), [tabFocus]);
 
-  // Focus on tabs when using up & down arrow keys
   const onKeyDown = e => {
     switch (e.key) {
       case KEY_CODES.ARROW_UP: {
@@ -297,52 +263,55 @@ const Jobs = () => {
         <div className="tabs">
           <h4> Job History </h4>
           <StyledTabList
-            role="tablist" aria-label="Job tabs" onKeyDown={e => onKeyDown(e)}
-            className="w-full"
-          >
+            role="tablist"
+            aria-label="Job tabs"
+            onKeyDown={e => onKeyDown(e)}
+            className="w-full">
             {jobsData &&
-              jobsData.map(({ node }, i) => {
-                const { company } = node.frontmatter;
+              jobsData.map(({ frontmatter }, i) => {
+                const { company } = frontmatter;
                 return (
                   <StyledTabButton
                     key={i}
                     isActive={activeJobsTabId === i}
                     onClick={() => setTabIndexes(i, EMPTY_TAB_ID)}
-                    ref={el => { tabs.current[i] = el; }} // return void
+                    ref={el => {
+                      tabs.current[i] = el;
+                    }}
                     id={`tab-${i}`}
                     role="tab"
-                    tabIndex={activeJobsTabId === i ? 0 : -1} // use numbers
+                    tabIndex={activeJobsTabId === i ? 0 : -1}
                     aria-selected={activeJobsTabId === i}
                     aria-controls={`panel-${i}`}>
                     <span>{company}</span>
                   </StyledTabButton>
                 );
-              })
-            }
-            {(activeJobsTabId !== EMPTY_TAB_ID) &&
-              <StyledHighlight activeTabId={activeJobsTabId} />
-            }
+              })}
+            {activeJobsTabId !== EMPTY_TAB_ID && <StyledHighlight activeTabId={activeJobsTabId} />}
           </StyledTabList>
 
           <br className="padding" />
 
           <h4> Education </h4>
           <StyledTabList
-            role="tablist" aria-label="Education tabs" onKeyDown={e => onKeyDown(e)}
-            className="w-full"
-          >
+            role="tablist"
+            aria-label="Education tabs"
+            onKeyDown={e => onKeyDown(e)}
+            className="w-full">
             {educationData &&
-              educationData.map(({ node }, i) => {
-                const { company } = node.frontmatter;
+              educationData.map(({ frontmatter }, i) => {
+                const { company } = frontmatter;
                 return (
                   <StyledTabButton
                     key={i}
                     isActive={activeEducationTabId === i}
                     onClick={() => setTabIndexes(EMPTY_TAB_ID, i)}
-                    ref={el => { tabs.current[i] = el; }} // return void
+                    ref={el => {
+                      tabs.current[i] = el;
+                    }}
                     id={`tab-${i}`}
                     role="tab"
-                    tabIndex={activeEducationTabId === i ? 0 : -1} // use numbers
+                    tabIndex={activeEducationTabId === i ? 0 : -1}
                     aria-selected={activeEducationTabId === i}
                     aria-controls={`panel-${i}`}>
                     <span>{company}</span>
@@ -358,8 +327,7 @@ const Jobs = () => {
         {activeJobsTabId !== EMPTY_TAB_ID && (
           <StyledTabPanels>
             {jobsData &&
-              jobsData.map(({ node }, i) => {
-                const { frontmatter, html } = node;
+              jobsData.map(({ frontmatter, html }, i) => {
                 const { title, url, company, range } = frontmatter;
 
                 return (
@@ -367,7 +335,7 @@ const Jobs = () => {
                     <StyledTabPanel
                       id={`panel-${i}`}
                       role="tabpanel"
-                      tabIndex={activeJobsTabId === i ? 0: -1}
+                      tabIndex={activeJobsTabId === i ? 0 : -1}
                       aria-labelledby={`tab-${i}`}
                       aria-hidden={activeJobsTabId !== i}
                       hidden={activeJobsTabId !== i}>
@@ -394,8 +362,7 @@ const Jobs = () => {
         {activeEducationTabId !== EMPTY_TAB_ID && (
           <StyledTabPanels>
             {educationData &&
-              educationData.map(({ node }, i) => {
-                const { frontmatter, html } = node;
+              educationData.map(({ frontmatter, html }, i) => {
                 const { title, url, company, range } = frontmatter;
 
                 return (
@@ -407,7 +374,7 @@ const Jobs = () => {
                     <StyledTabPanel
                       id={`panel-${i}`}
                       role="tabpanel"
-                      tabIndex={activeEducationTabId === i ?  0: -1}
+                      tabIndex={activeEducationTabId === i ? 0 : -1}
                       aria-labelledby={`tab-${i}`}
                       aria-hidden={activeEducationTabId !== i}
                       hidden={activeEducationTabId !== i}>

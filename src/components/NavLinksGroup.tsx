@@ -1,28 +1,26 @@
 import { CSSTransition } from 'react-transition-group';
 import config from '@/config.js';
 import React from 'react';
-import {Link} from "gatsby";
+import Link from 'next/link';
 
 type NavLinksGroupParams = {
   isHome?: boolean;
-  timeout?: number
-}
+  timeout?: number;
+};
 
-export function NavLinksGroup({
-  isHome = false,
-  timeout = 0
-}: NavLinksGroupParams) {
+export function NavLinksGroup({ isHome = false, timeout = 0 }: NavLinksGroupParams) {
   const fadeDownClass = isHome ? 'fade-down' : '';
 
   return (
     <ol>
-      {config.navLinks && config.navLinks.map((link, i) => (
-        <CSSTransition key={i} classNames={fadeDownClass} timeout={timeout}>
-          <li key={i} style={{transitionDelay: `${isHome ? i * 100 : 0}ms`}}>
-            <Link to={link.url}>{link.name}</Link>
-          </li>
-        </CSSTransition>
-      ))}
+      {config.navLinks &&
+        config.navLinks.map((link, i) => (
+          <CSSTransition key={i} classNames={fadeDownClass} timeout={timeout}>
+            <li key={i} style={{ transitionDelay: `${isHome ? i * 100 : 0}ms` }}>
+              <Link href={link.url}>{link.name}</Link>
+            </li>
+          </CSSTransition>
+        ))}
     </ol>
-  )
+  );
 }

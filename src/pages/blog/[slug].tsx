@@ -1,11 +1,10 @@
 import React from 'react';
-import { graphql, Link } from 'gatsby';
+import Link from 'next/link';
 import kebabCase from 'lodash/kebabCase';
-import PropTypes from 'prop-types';
-import { Helmet } from 'react-helmet';
 import styled from 'styled-components';
 import { Layout } from '@/components';
-import {ALL_BLOG_POSTS_MESSAGE} from "../utils/constants";
+import { ALL_BLOG_POSTS_MESSAGE, BLOG } from '@/utils/constants';
+import { getBlogPostBySlug, listPostSlugs } from '@/lib/content';
 
 const StyledPostContainer = styled.main`
   max-width: 1000px;
@@ -35,9 +34,7 @@ const StyledPostContent = styled.div`
   }
 
   a {
-    ${({ theme }) => {
-      return `${theme.mixins.inlineLink}`
-    }
+    ${({ theme }) => `${theme.mixins.inlineLink}`}
   }
 
   code {
@@ -54,23 +51,20 @@ const StyledPostContent = styled.div`
   }
 `;
 
-const PostTemplate = ({ data, location }) => {
-  console.log("LOCATION", location)
-  if (!data?.markdownRemark) {
-    return <div>Post not found.</div>;
+const BlogPostPage = ({ post }) => {
+  if (!post) {
+    return null;
   }
 
-  const { frontmatter, html } = data.markdownRemark;
-  const { title, date, tags } = frontmatter;
+  const { frontmatter, html } = post;
+  const { title, date, tags = [] } = frontmatter;
 
   return (
-    <Layout location={location}>
-      <Helmet title={title} />
-
+    <Layout headProps={{ title }}>
       <StyledPostContainer>
         <span className="breadcrumb">
           <span className="arrow">&larr;</span>
-          <Link to="/blog">{ALL_BLOG_POSTS_MESSAGE}</Link>
+          <Link href="/blog">{ALL_BLOG_POSTS_MESSAGE}</Link>
         </span>
 
         <StyledPostHeader>
@@ -84,13 +78,11 @@ const PostTemplate = ({ data, location }) => {
               })}
             </time>
             <span>&nbsp;&mdash;&nbsp;</span>
-            {tags &&
-              tags.length > 0 &&
-              tags.map((tag, i) => (
-                <Link key={i} to={`/blog/tags/${kebabCase(tag)}/`} className="tag">
-                  #{tag}
-                </Link>
-              ))}
+            {tags.map((tag, i) => (
+              <Link key={i} href={`/${BLOG}/tags/${kebabCase(tag)}/`} className="tag">
+                #{tag}
+              </Link>
+            ))}
           </p>
         </StyledPostHeader>
 
@@ -100,24 +92,34 @@ const PostTemplate = ({ data, location }) => {
   );
 };
 
-export default PostTemplate;
+export async function getStaticPaths() {
+  const paths = listPostSlugs().map(slug => {
+    const normalized = slug
+      .replace(/^\/blog\//, '')
+      .replace(/^\//, '')
+      .replace(/\/$/, '');
+    return { params: { slug: normalized } };
+  });
 
-PostTemplate.propTypes = {
-  data: PropTypes.object,
-  location: PropTypes.object,
-};
+  return {
+    paths,
+    fallback: false,
+  };
+}
 
-export const pageQuery = graphql`
-  query ($path: String!) {
-    markdownRemark(frontmatter: { slug: { eq: $path } }) {
-      html
-      frontmatter {
-        title
-        description
-        date
-        slug
-        tags
-      }
-    }
+export async function getStaticProps({ params }) {
+  const slug = `/blog/${params.slug}/`;
+  const post = await getBlogPostBySlug(slug);
+
+  if (!post) {
+    return { notFound: true };
   }
-`;
+
+  return {
+    props: {
+      post,
+    },
+  };
+}
+
+export default BlogPostPage;

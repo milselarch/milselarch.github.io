@@ -1,13 +1,11 @@
 import React from 'react';
-import { graphql, Link } from 'gatsby';
+import Link from 'next/link';
 import kebabCase from 'lodash/kebabCase';
-import PropTypes from 'prop-types';
-import { Helmet } from 'react-helmet';
 import styled from 'styled-components';
 import { Layout } from '@/components';
 import { IconBookmark } from '@/components/icons';
-import {GET_ALLOW_EDGY_BLOG_POSTS, BLOG} from "@/utils/constants";
-
+import { GET_ALLOW_EDGY_BLOG_POSTS, BLOG } from '@/utils/constants';
+import { getBlogPosts } from '@/lib/content';
 
 const StyledMainContainer = styled.main`
   & > header {
@@ -17,7 +15,8 @@ const StyledMainContainer = styled.main`
     a {
       &:hover,
       &:focus {
-        cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='48' viewport='0 0 100 100' style='fill:black;font-size:24px;'><text y='50%'>⚡</text></svg>")
+        cursor:
+          url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='48' viewport='0 0 100 100' style='fill:black;font-size:24px;'><text y='50%'>⚡</text></svg>")
             20 0,
           auto;
       }
@@ -47,7 +46,6 @@ const StyledGrid = styled.ul`
 
   @media (max-width: 1080px) {
     & > li {
-      // set a fixed basis to avoid wrapping issues
       flex-basis: 25rem;
       min-width: 25rem;
     }
@@ -154,63 +152,25 @@ const StyledPost = styled.li`
   }
 `;
 
-/*
-  .post__inner {
-    ${({ theme }) => theme.mixins.boxShadow};
-
-*/
-
-interface FrontMatter {
-  title: string;
-  description: string;
-  date: string;
-  draft: boolean;
-  slug: string;
-  tags: string[];
-  edgy?: boolean;
-}
-
-interface BlogPostNode {
-  frontmatter: FrontMatter;
-  html: string;
-}
-
-interface BlogPageData {
-  allMarkdownRemark: {
-    edges: {
-      node: BlogPostNode;
-    }[];
-  };
-}
-
-const BlogPage = ({
-  location, data 
-}: {
-  data: BlogPageData,
-  location: Location
-}) => {
-  const posts = data.allMarkdownRemark.edges || [];
+const BlogPage = ({ posts }) => {
   const ALLOW_EDGY_BLOG_POSTS = GET_ALLOW_EDGY_BLOG_POSTS();
 
   return (
-    <Layout location={location}>
-      <Helmet title="Blog" />
-
+    <Layout headProps={{ title: 'Blog' }}>
       <StyledMainContainer>
         <header>
           <h1 className="big-heading">Me Blog</h1>
-          <p className="subtitle">
-            May contain content.
-          </p>
+          <p className="subtitle">May contain content.</p>
         </header>
 
         <StyledGrid>
           {posts.length > 0 &&
-            posts.map(({ node }, i) => {
-              const { frontmatter } = node;
-              const { title, description, slug, date, tags, edgy } = frontmatter;
-              if ((edgy === true) && !ALLOW_EDGY_BLOG_POSTS) { return }
-              
+            posts.map(({ frontmatter }, i) => {
+              const { title, description, slug, date, tags = [], edgy } = frontmatter;
+              if (edgy === true && !ALLOW_EDGY_BLOG_POSTS) {
+                return null;
+              }
+
               const formattedDate = new Date(date).toLocaleDateString();
 
               return (
@@ -221,7 +181,7 @@ const BlogPage = ({
                         <IconBookmark />
                       </div>
                       <h5 className="post__title">
-                        <Link to={slug}>{title}</Link>
+                        <Link href={slug}>{title}</Link>
                       </h5>
                       <p className="post__desc">{description}</p>
                     </header>
@@ -229,9 +189,9 @@ const BlogPage = ({
                     <footer>
                       <span className="post__date">{formattedDate}</span>
                       <ul className="post__tags">
-                        {tags.map((tag, i) => (
-                          <li key={i}>
-                            <Link to={`/${BLOG}/tags/${kebabCase(tag)}/`} className="inline-link">
+                        {tags.map((tag, idx) => (
+                          <li key={idx}>
+                            <Link href={`/${BLOG}/tags/${kebabCase(tag)}/`} className="inline-link">
                               #{tag}
                             </Link>
                           </li>
@@ -248,36 +208,9 @@ const BlogPage = ({
   );
 };
 
-BlogPage.propTypes = {
-  location: PropTypes.object.isRequired,
-  data: PropTypes.object.isRequired,
-};
+export async function getStaticProps() {
+  const posts = await getBlogPosts();
+  return { props: { posts } };
+}
 
 export default BlogPage;
-
-export const pageQuery = graphql`
-  {
-    allMarkdownRemark(
-      filter: {
-        fileAbsolutePath: { regex: "/content/posts/" }
-        frontmatter: { draft: { ne: true } }
-      }
-      sort: { fields: [frontmatter___date], order: DESC }
-    ) {
-      edges {
-        node {
-          frontmatter {
-            title
-            description
-            slug
-            date
-            tags
-            draft
-            edgy
-          }
-          html
-        }
-      }
-    }
-  }
-`;

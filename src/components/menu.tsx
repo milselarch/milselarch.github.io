@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Helmet } from 'react-helmet';
-import styled, {DefaultTheme} from 'styled-components';
+import styled, { DefaultTheme } from 'styled-components';
 import { KEY_CODES } from '@/utils';
 import { useOnClickOutside } from '@/hooks';
-import {NavLinksGroup} from "@/components/NavLinksGroup";
+import { NavLinksGroup } from '@/components/NavLinksGroup';
 
 /*
 This component renders a responsive navigation menu
@@ -23,9 +22,7 @@ interface StyledHamburgerButtonProps {
   menuOpen: boolean;
 }
 
-const StyledHamburgerButton = styled.button<
-  StyledHamburgerButtonProps & { theme: DefaultTheme }
->`
+const StyledHamburgerButton = styled.button<StyledHamburgerButtonProps & { theme: DefaultTheme }>`
   display: none;
 
   @media (max-width: 768px) {
@@ -87,7 +84,7 @@ const StyledHamburgerButton = styled.button<
       top: ${props => (props.menuOpen ? `0` : `-10px`)};
       opacity: ${props => (props.menuOpen ? 0 : 1)};
       transition: ${({ menuOpen }) =>
-    menuOpen ? 'var(--ham-before-active)' : 'var(--ham-before)'};
+        menuOpen ? 'var(--ham-before-active)' : 'var(--ham-before)'};
     }
 
     &:after {
@@ -106,7 +103,7 @@ const StyledSidebar = styled.aside<StyledHamburgerButtonProps>`
   display: none;
 
   @media (max-width: 768px) {
-    ${({theme}) => theme.mixins.flexCenter};
+    ${({ theme }) => theme.mixins.flexCenter};
     position: fixed;
     top: 0;
     bottom: 0;
@@ -124,7 +121,7 @@ const StyledSidebar = styled.aside<StyledHamburgerButtonProps>`
   }
 
   nav {
-    ${({theme}) => theme.mixins.flexBetween};
+    ${({ theme }) => theme.mixins.flexBetween};
     width: 100%;
     flex-direction: column;
     color: var(--lighter-slate);
@@ -264,12 +261,20 @@ const Menu = () => {
   const wrapperRef = useRef(null);
   useOnClickOutside(wrapperRef, () => setMenuOpen(false));
 
+  useEffect(() => {
+    if (menuOpen) {
+      document.body.classList.add('blur');
+    } else {
+      document.body.classList.remove('blur');
+    }
+
+    return () => {
+      document.body.classList.remove('blur');
+    };
+  }, [menuOpen]);
+
   return (
     <StyledMenu>
-      <Helmet>
-        <body className={menuOpen ? 'blur' : ''} />
-      </Helmet>
-
       <div ref={wrapperRef}>
         <StyledHamburgerButton
           onClick={toggleMenu}
@@ -283,12 +288,10 @@ const Menu = () => {
 
         <StyledSidebar menuOpen={menuOpen} aria-hidden={!menuOpen} tabIndex={menuOpen ? 1 : -1}>
           <nav ref={navRef}>
-            {
-              NavLinksGroup({
-                isHome: false,
-                timeout: 0,
-              })
-            }
+            {NavLinksGroup({
+              isHome: false,
+              timeout: 0,
+            })}
             {/*
             <a href="/resume.pdf" className="resume-link">
               Resume

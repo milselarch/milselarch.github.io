@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { useStaticQuery, graphql } from 'gatsby';
-import { GatsbyImage, getImage } from 'gatsby-plugin-image';
+import Image from 'next/image';
 import styled from 'styled-components';
 import sr from '@/utils/sr';
 import { srConfig } from '@/config.js';
@@ -306,37 +305,21 @@ const StyledProject = styled.li`
   }
 `;
 
-const Featured = () => {
-  const data = useStaticQuery(graphql`
-    {
-      featured: allMarkdownRemark(
-        filter: { fileAbsolutePath: { regex: "/content/featured/" } }
-        sort: { fields: [frontmatter___date], order: ASC }
-      ) {
-        edges {
-          node {
-            frontmatter {
-              title
-              cover {
-                childImageSharp {
-                  gatsbyImageData(width: 700, placeholder: BLURRED, formats: [AUTO, WEBP, AVIF])
-                }
-              }
-              tech
-              github
-              external
-              cta
-            }
-            html
-          }
-        }
-      }
-    }
-  `);
+type FeaturedNode = {
+  frontmatter: {
+    title: string;
+    cover: string;
+    tech: string[];
+    github?: string;
+    external?: string;
+    cta?: string;
+  };
+  html: string;
+};
 
-  const featuredProjects = data.featured.edges.filter(({ node }) => node);
+const Featured = ({ featuredProjects = [] }: { featuredProjects: FeaturedNode[] }) => {
   const revealTitle = useRef(null);
-  const revealProjects = useRef([]);
+  const revealProjects = useRef<any[]>([]);
   const prefersReducedMotion = usePrefersReducedMotion();
 
   useEffect(() => {
@@ -356,13 +339,15 @@ const Featured = () => {
 
       <StyledProjectsGrid>
         {featuredProjects &&
-          featuredProjects.map(({ node }, i) => {
-            const { frontmatter, html } = node;
+          featuredProjects.map(({ frontmatter, html }, i) => {
             const { external, title, tech, github, cover, cta } = frontmatter;
-            const image = getImage(cover);
 
             return (
-              <StyledProject key={i} ref={el => { revealProjects.current[i] = el; }}>
+              <StyledProject
+                key={i}
+                ref={el => {
+                  revealProjects.current[i] = el;
+                }}>
                 <div className="project-content">
                   <div>
                     <p className="project-overline">Featured Project</p>
@@ -376,10 +361,10 @@ const Featured = () => {
                       dangerouslySetInnerHTML={{ __html: html }}
                     />
 
-                    {tech.length && (
+                    {tech.length > 0 && (
                       <ul className="project-tech-list">
-                        {tech.map((tech, i) => (
-                          <li key={i}>{tech}</li>
+                        {tech.map((item, idx) => (
+                          <li key={idx}>{item}</li>
                         ))}
                       </ul>
                     )}
@@ -406,7 +391,7 @@ const Featured = () => {
 
                 <div className="project-image">
                   <a href={external ? external : github ? github : '#'}>
-                    <GatsbyImage image={image} alt={title} className="img" />
+                    <Image src={cover} alt={title} className="img" width={700} height={400} />
                   </a>
                 </div>
               </StyledProject>
